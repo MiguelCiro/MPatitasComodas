@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <div id="overlay-bg" class="overlay-bg"></div>
+
+    <div id="side-cart" class="cart-sidebar">
+        <div style="padding:20px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; font-size:16px; letter-spacing:1px;">TU CARRITO</h3>
+            <button id="close-cart" class="close-btn">✕</button>
+        </div>
+
+        <div id="cart-items-container" class="cart-body" style="flex-grow: 1; overflow-y: auto;">
+            <p style="text-align:center; color:#888; margin-top:50px;">El carrito está vacío <br> Recuerda preguntar por disponibilidad a la hora de enviar tu carrito/pedido.</p>
+        </div>
+
+        <div style="padding:20px; border-top:1px solid #eee;">
+            <button id="checkout-whatsapp" class="btn-add-cart" style="width: 100%; margin: 0;">
+                FINALIZAR POR WHATSAPP
+            </button>
+        </div>
+    </div>
+
+    <div class="announcement-delivery">
+        <div class="envio">
+            <span>ENVÍOS GRATIS POR TIEMPO LIMITADO</span>
+            <span>ENVÍOS GRATIS POR TIEMPO LIMITADO</span>
+            <span>ENVÍOS GRATIS POR TIEMPO LIMITADO</span>
+        </div>
+    </div>
+
+    <div id="search-bar" class="search-overlay">
+        <div class="search-content">
+            <input type="text" placeholder="¿Qué estás buscando?" id="search-input">
+            <button id="close-search">✕</button>
+        </div>
+    </div>
+
+    <div id="side-cart" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Tu Carrito</h3>
+            <button id="close-cart">✕</button>
+        </div>
+         <div class="cart-body">
+            <p>Tu carrito está vacío.</p>
+        </div>
+         <div class="cart-footer">
+            <button class="btn-checkout">VER CARRITO</button>
+        </div>
+    </div>
+
+    <div id="overlay-bg" class="overlay-bg"></div>
+
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left" id="header-left">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="header-logo">
+                <h1 class="logo-text">
+                    MPATITAS <br>
+                    COMODAS <span>.CO</span>
+                </h1>
+            </div>
+
+            <div class="header-icons">
+                <button class="icon-btn" id="search-trigger">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+
+                <button class="icon-btn" id="cart-trigger">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+        </div>    
+            
+            <nav id="nav-menu">
+                <ul>
+                    <li><a href="largas.html">LARGAS</a></li>
+                    <li><a href="cortas.html">CORTAS</a></li>
+                    <li><a href="deportivas.html">DEPORTIVAS</a></li>
+                    <li><a href="calentadoras.html">CALENTADORAS</a></li>
+                    <li><a href="compresion.html">COMPRESIÓN</a></li>
+                    <li><a href="personajes.html">PERSONAJES</a></li>
+                </ul>
+            </nav>
+    </header>
+
+    <section class="product-gallery">
+        <div class="gallery-grid">
+            <div class="product-card">
+                <img src="imagenes/personajes/stranger-thinks-01.PNG" alt="">
+            </div>
+        </div>
+
+        <div class="gallery-action">
+            <a href="personajes.html" class="btn-buy">COMPRAR AHORA</a>
+        </div>
+
+    </section>
+
+    <section class="product-grid-container">
+        <h3>Nuestros Destacados</h3>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="imagenes/largas/larga-nike-BRP.PNG" alt="">
+                    <span class="badge">NUEVO</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="imagenes/cortas/talonera-puma-BL.png" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer__content-top">
+    
+            <div class="footer-block grid__item">
+                <details id="Details-Contact" class="footer-block__details">
+                    <summary class="footer-block__heading">
+                        INFORMACIÓN DE CONTACTO
+                        <span class="icon-plus">+</span>
+                    </summary>
+                    <div class="footer-block__details-content">
+                        <ul class="footer-block__list list-unstyled">
+                            <li>+57 324 8343679 </li>
+                            <li>mpatitascomodas@gmail.com</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="footer-block grid__item">
+                <details id="Details-Policies" class="footer-block__details">
+                    <summary class="footer-block__heading">
+                        POLÍTICAS Y ENVÍOS
+                        <span class="icon-plus">+</span>
+                    </summary>
+                    <div class="footer-block__details-content">
+                        <ul class="footer-block__list list-unstyled">
+                            <li><a href="#">Política de privacidad</a></li>
+                            <li><a href="#">Política de Cambios y Devoluciones</a></li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="footer-block grid__item">
+                <details id="Details-Subscribe" class="footer-block__details">
+                    <summary class="footer-block__heading">
+                        SUSCRÍBETE
+                        <span class="icon-plus">+</span>
+                    </summary>
+                    <div class="footer-block__details-content">
+                        <div class="footer-block__newsletter">
+                            <form class="newsletter-form">
+                                <input type="email" placeholder="Email" class="field__input">
+                                <button type="submit" class="newsletter-form__button">SUSCRIBIRSE</button>
+                            </form>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+        </div>
+
+        <div class="footer__content-bottom">
+            <div class="footer__copyright">
+                <small>© 2025 MPatitas Comodas</small>
+            </div>
+        </div>
+    </footer>
+
+     <script>
+        // SELECCIÓN DE ELEMENTOS DEL DOM 
+        const menuBtn = document.getElementById('header-left');
+        const navMenu = document.getElementById('nav-menu');
+        const searchBtn = document.getElementById('search-trigger');
+        const searchBar = document.getElementById('search-bar');
+        const searchInput = document.getElementById('search-input');
+        const closeSearch = document.getElementById('close-search');
+
+        const sideCart = document.getElementById('side-cart');
+        const overlay = document.getElementById('overlay-bg');
+        const cartTrigger = document.getElementById('cart-trigger');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartCountElement = document.querySelector('.cart-count');
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const checkoutBtn = document.getElementById('checkout-whatsapp');
+        
+        // ESTADO DEL CARRITO
+        let cart = JSON.parse(localStorage.getItem('mpatittas_cart')) || [];
+
+        // FUNCIONES DE INTERFAZ
+        const toggleCart = (show) => {
+            if(show) {
+                sideCart.classList.add('active');
+                overlay.classList.add('active');
+            } else {
+                sideCart.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        };
+
+        window.updateCartUI = () => {
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+            if (cartCountElement) cartCountElement.innerText = totalItems;
+            localStorage.setItem('mpatittas_cart', JSON.stringify(cart));
+
+            if (!cartItemsContainer) return;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p style="text-align:center; color:#888; margin-top:50px; font-family:sans-serif;">El carrito está vacío</p>';
+            } else {
+                cartItemsContainer.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div>
+                            <p class="cart-item-name">${item.name}</p>
+                            <p class="cart-item-price">${item.quantity} x $${item.price}</p>
+                        </div>
+                        <button class="btn-remove" onclick="removeFromCart('${item.id}')">✕</button>
+                    </div>
+                `).join('');
+            }
+        };
+
+        //LÓGICA DE PRODUCTOS
+        window.addToCart = (id, name, price) => {
+            const existing = cart.find(i => i.id === id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            window.updateCartUI();
+            toggleCart(true);
+        };
+
+        window.removeFromCart = (id) => {
+            cart = cart.filter(i => i.id != id);
+            window.updateCartUI();
+        };
+
+        // EVENTOS(Clicks)
+        if (cartTrigger) cartTrigger.onclick = () => toggleCart(true);
+        if (closeCartBtn) closeCartBtn.onclick = () => toggleCart(false);
+        if (overlay) overlay.onclick = () => toggleCart(false);
+
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-add-cart');
+    
+            if (btn && btn.id !== 'checkout-whatsapp') {
+                const id = btn.dataset.id;
+                const name = btn.dataset.name;
+                const price = btn.dataset.price;
+                window.addToCart(id, name, price);
+            }
+        });
+
+        if (checkoutBtn) {
+        checkoutBtn.onclick = () => {
+        if (cart.length === 0) return alert("Tu carrito está vacío");
+        
+        const tel = "573054710549"; 
+        
+        let msg = "¡Hola, equipo MPatitas! 🐾✨\n\nAcabo de armar mi carrito en la web y me encantaron estas referencias:\n\n";
+        
+        cart.forEach(i => {
+            msg += `✅ ${i.quantity}x ${i.name} ($${i.price})\n`;
+        });
+        
+        msg += "\n📍 ¿Me confirman disponibilidad y envío? ¡Gracias! 🧦💖";
+        
+        window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+        }
+
+        // MENÚ DE NAVEGACIÓN ---
+        if (menuBtn && navMenu) {
+            menuBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                menuBtn.classList.toggle('open');
+            });
+        }
+
+        // LUPA Y BARRA DE BÚSQUEDA ---
+        if (searchBtn && searchBar) {
+            searchBtn.addEventListener('click', () => {
+                searchBar.classList.add('active');
+                setTimeout(() => { if(searchInput) searchInput.focus(); }, 300);
+            });
+        }
+
+        if (closeSearch) {
+            closeSearch.addEventListener('click', () => {
+                searchBar.classList.remove('active');
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = searchInput.value.trim();
+                    if (query.length > 2) {
+                        window.location.href = `buscar.html?q=${encodeURIComponent(query)}`;
+                    } else {
+                        alert("Por favor, escribe al menos 3 letras.");
+                    }
+                }
+            });
+        }
+
+        // BOLITAS DE COLORES
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('dot')) {
+                const dotSeleccionado = e.target;
+                const nuevaRutaImagen = dotSeleccionado.getAttribute('data-img');
+                if (!nuevaRutaImagen) return;
+
+                const tarjetaPadre = dotSeleccionado.closest('.product-card');
+                const imagenProducto = tarjetaPadre.querySelector('.product-image-container img');
+
+                if (imagenProducto) {
+                    imagenProducto.src = nuevaRutaImagen;
+                }
+
+                const todasLasBolitas = tarjetaPadre.querySelectorAll('.dot');
+                todasLasBolitas.forEach(d => d.style.border = "1px solid #ddd");
+                dotSeleccionado.style.border = "2px solid #000";
+            }
+        });
+
+    </script>
+</body>
+</html>
