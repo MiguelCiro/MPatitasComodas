@@ -618,13 +618,13 @@
                 let msg = "¡Hola, equipo MPatitas! 🧦✨\n\nAcabo de armar mi pedido en la web:\n\n";
                 
                 cart.forEach(i => {
-                    msg += `✅ ${i.quantity}x ${i.name}\n   🎨 Color: ${i.color}\n   💰 Subtotal: $${(i.price * i.quantity).toLocaleString('es-CO')}\n\n`;
+                    msg += `✅ ${i.quantity}x ${i.name}\n     ● Color: ${i.color}\n   ● Subtotal: $${(i.price * i.quantity).toLocaleString('es-CO')}\n\n`;
                 });
                 
                 msg += `--------------------------\n`;
-                msg += `🚀 *TOTAL A PAGAR: $${totalPrice.toLocaleString('es-CO')}*\n`;
+                msg += ` TOTAL A PAGAR: $${totalPrice.toLocaleString('es-CO')}*\n`;
                 msg += `--------------------------\n`;
-                msg += "\n📍 ¿Me confirman disponibilidad? ¡Gracias! 🧦💖";
+                msg += "\n ¿Me confirman disponibilidad? ¡Gracias! 🧦💖";
                 
                 window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, '_blank');
             };
