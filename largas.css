@@ -465,6 +465,7 @@ header{
 .blue2 { background: rgb(92, 92, 194);}
 .brown { background: rgb(233, 142, 76);}
 .pink { background: pink;}
+.orange {background: orange;}
 
 .dot {
     cursor: pointer;
