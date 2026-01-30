@@ -474,6 +474,8 @@ header{
 .blue2 {background: rgb(160, 160, 255);}
 .yellow {background: yellow;}
 .gray2{background: rgb(64, 64, 64);}
+.turquesa{background: turquoise;}
+.purple{background: purple;}
 
 .dot {
     cursor: pointer;
