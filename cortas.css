@@ -470,7 +470,8 @@ header{
 .red   { background: red; }
 .pink { background: pink;}
 .brown { background: rgb(192, 120, 69);}
-.green {background: greenyellow;}
+.green2 {background: greenyellow;}
+.green {background: green;}
 .blue2 {background: rgb(160, 160, 255);}
 .yellow {background: yellow;}
 .gray2{background: rgb(64, 64, 64);}
