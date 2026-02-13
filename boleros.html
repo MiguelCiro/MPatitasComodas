@@ -382,7 +382,9 @@
                 if (cart.length === 0) return alert("Tu carrito está vacío");
                 
                 const tel = "573248343679"; 
-                const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+                const costoEnvio = 5000;
+                const subtotalProductos = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+                const totalPrice = subtotalProductos + costoEnvio;
                 
                 let msg = "¡Hola, equipo MPatitas! 🧦✨\n\nAcabo de armar mi pedido en la web:\n\n";
                 
@@ -391,9 +393,10 @@
                 });
                 
                 msg += `--------------------------\n`;
-                msg += ` TOTAL A PAGAR: $${totalPrice.toLocaleString('es-CO')}*\n`;
+                msg += `🚚 Valor Domicilio: $${costoEnvio.toLocalString('es-CO')}\n`;
+                msg += `🚀 *TOTAL A PAGAR: $${totalPrice.toLocaleString('es-CO')}*\n`;
                 msg += `--------------------------\n`;
-                msg += "\n ¿Me confirman disponibilidad? ¡Gracias! 🧦💖";
+                msg += "\n📍 ¿Me confirman disponibilidad? ¡Gracias! 🧦💖";
                 
                 window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, '_blank');
             };
