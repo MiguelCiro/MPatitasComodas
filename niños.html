@@ -5,58 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Niños | Mpatitas Comodas</title>
     <link rel="icon" href="logo-mpatitascomodas.jpeg" type="image/jpeg">
-    <link rel="preload" href="niños.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="niños.css"></noscript></head>
-    <style>
-    *{margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Segoe UI',sans-serif;}
-
-        body{background-color:white;}
-
-        /*ANUNCIO */
-        .announcement-delivery{background-color:#000;
-            color:white;
-            text-align:center;
-            padding:10px;
-            font-size:0.85rem;
-            font-weight:bold;
-            overflow:hidden;
-            white-space:nowrap;
-            position:relative;}
-
-        header{background-color:#fff;
-            border-bottom:1px solid #f0f0f0;
-            position:sticky;
-            top:0;
-            z-index:1000;}
-
-        .header-container{display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap: 15px;
-            padding:10px 20px;}
-
-        .logo-text{font-family:'Arial Black',sans-serif;font-size:1.4rem;line-height:0.9;text-align:center;color:#000;letter-spacing:-1px;}
-        .logo-text span{color:#e91e63;}
-    </style>
+    <link rel="stylesheet" href="niños.css">
 </head>
 <body>
     <div id="overlay-bg" class="overlay-bg"></div>
 
     <div id="side-cart" class="cart-sidebar">
-        <div class="cart-header">
-            <h3>TU CARRITO</h3>
-            <button id="close-cart" class="close-btn" aria-label="Cerrar carrito">✕</button>
+        <div style="padding:20px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; font-size:16px; letter-spacing:1px;" aria-label="Cerrar carrito">TU CARRITO</h3>
+            <button id="close-cart" class="close-btn">✕</button>
         </div>
 
-        <div id="cart-items-container" class="cart-body">
-            <p class="cart-empty-msg">El carrito está vacío</p>
+        <div id="cart-items-container" class="cart-body" style="flex-grow: 1; overflow-y: auto;">
+            <p style="text-align:center; color:#888; margin-top:50px;">El carrito está vacío <br> Recuerda preguntar por disponibilidad a la hora de enviar tu carrito/pedido.</p>
         </div>
 
-        <div class="cart-footer">
-            <button id="checkout-whatsapp" class="btn-add-cart btn-whatsapp-checkout" aria-label="Finalizar compra por WhatsApp">
+        <div style="padding:20px; border-top:1px solid #eee;">
+            <button id="checkout-whatsapp" class="btn-add-cart" style="width: 100%; margin: 0;" aria-label="Finalizar compra por WhatsApp">
                 FINALIZAR POR WHATSAPP
             </button>
         </div>
