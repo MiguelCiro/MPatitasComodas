@@ -93,18 +93,21 @@
             </div>
         </div>    
             
-            <nav id="nav-menu">
-                <ul>
-                    <li><a href="largas.html">LARGAS</a></li>
-                    <li><a href="cortas.html">CORTAS</a></li>
-                    <li><a href="deportivas.html">ANTIDESLIZANTES</a></li>
-                    <li><a href="calentadoras.html">OVEJERAS</a></li>
-                    <li><a href="compresion.html">COMPRESIÓN</a></li>
-                    <li><a href="personajes.html">PERSONAJES</a></li>
-                    <li><a href="niños.html">NIÑOS</a></li>
-                    <li><a href="boleros.html">BOLERAS</a></li>
-                </ul>
-            </nav>
+        <nav id="nav-menu">
+            <div class="close-container">
+                <span id="close-menu">&times;</span>
+            </div>
+            <ul>
+                <li><a href="largas.html">LARGAS</a></li>
+                <li><a href="cortas.html">CORTAS</a></li>
+                <li><a href="deportivas.html">ANTIDESLIZANTES</a></li>
+                <li><a href="calentadoras.html">OVEJERAS</a></li>
+                <li><a href="compresion.html">COMPRESIÓN</a></li>
+                <li><a href="personajes.html">PERSONAJES</a></li>
+                <li><a href="niños.html">NIÑOS</a></li>
+                <li><a href="boleros.html">BOLERAS</a></li>
+            </ul>
+        </nav>
     </header>
 
     <section class="product-gallery">
@@ -197,7 +200,7 @@
 
         <div class="footer__content-bottom">
             <div class="footer__copyright">
-                <small>© 2025 MPatitas Comodas</small>
+                <small>© 2026 MPatitas Comodas</small>
             </div>
         </div>
     </footer>
@@ -205,6 +208,7 @@
      <script>
         const menuBtn = document.getElementById('header-left');
         const navMenu = document.getElementById('nav-menu');
+        const closeMenuX =document.getElementById('close-menu');
         const searchBtn = document.getElementById('search-trigger');
         const searchBar = document.getElementById('search-bar');
         const searchInput = document.getElementById('search-input');
@@ -363,10 +367,16 @@
         });
 
         // RESTO DE FUNCIONES (MENÚ, LUPA, ETC)
+
         if (menuBtn && navMenu) {
             menuBtn.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
                 menuBtn.classList.toggle('open');
+            });
+        }
+        if (closeMenuX && navMenu) {
+            closeMenuX.addEventListener('click', () => {
+                navMenu.classList.remove('active');
             });
         }
         if (searchBtn && searchBar) {

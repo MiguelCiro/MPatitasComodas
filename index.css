@@ -277,22 +277,43 @@ header{
 
 #nav-menu{
     display: none;
-    position: absolute;
-    top: 70px;
+    position: fixed;
+    top: 0;
     left: 0;
     width: 100%;
     background-color: #fff;
-    z-index: 999;
+    z-index: 10000;
     height: 100hv;
+    overflow-y: auto;
 }
 
 #nav-menu.active{
     display: block;
 }
 
+.close-container{
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 25px 0 0;
+}
+
+#close-menu{
+    font-size: 45px;
+    color: #333;
+    cursor: pointer;
+    line-height: 1;
+    font-family: Arial,sans-serif;
+    transition: all 0.3s ease;
+}
+
+.close-container :hover{
+    color: #e91e63;
+    transform: rotate(90deg);
+}
+
 #nav-menu ul{
     list-style: none;
-    padding: 0;
+    padding: 20px 0;
     margin: 0;
 }
 
