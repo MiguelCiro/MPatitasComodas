@@ -233,17 +233,44 @@ header{
 
 #nav-menu{
     display: none;
-    position: absolute;
-    top: 70px;
+    position: fixed;
+    top: 0;
     left: 0;
     width: 100%;
     background-color: #fff;
-    z-index: 999;
-    height: 100hv;
+    z-index: 10000;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 #nav-menu.active{
     display: block;
+}
+
+.menu-header-black{
+    background-color: #000;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px;
+    box-sizing: border-box;
+}
+
+#close-menu{
+    font-size: 30px;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+    font-family: Arial, sans-serif;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+#close-menu:hover {
+    color: #e91e63;
+    transform: rotate(90deg);
 }
 
 #nav-menu ul{
@@ -254,20 +281,28 @@ header{
 
 #nav-menu ul li a{
     text-decoration: none;
-    color: #333;
+    color: #1a1a1a;
     display: block;
-    padding: 20px;
-    font-family: Arial;
-    font-weight: bold;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 16px;
+    padding:15px 30px;
+    font-family: 'Segoe UI','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 300;
+    border-bottom: none;
+    font-size: 14px;
     text-transform: uppercase;
+    letter-spacing: 1.2px;
+    transition: all 0.2s ease;
 }
 
 #nav-menu ul li a:hover{
-    background-color: #f9f9f9;
+    background-color: #fcfcfc;
+    padding-left: 40px;
+    color: #e91e63;
 }
 
+#nav-menu ul li:last-child a{
+    font-weight: 600;
+    margin-top: 5px;
+}
 .header-icons{
     display: flex;
     gap: 15px;
