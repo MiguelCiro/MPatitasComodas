@@ -91,6 +91,10 @@
         </div>    
             
             <nav id="nav-menu">
+                <div class="menu-header-black">
+                    <span id="close-menu">&times;</span>
+                </div>
+
                 <ul>
                     <li><a href="index.html">INICIO</a></li>
                     <li><a href="largas.html">LARGAS</a></li>
@@ -100,6 +104,7 @@
                     <li><a href="compresion.html">COMPRESIÓN</a></li>
                     <li><a href="niños.html">NIÑOS</a></li>
                     <li><a href="boleros.html">BOLEROS</a></li>
+                    <li><a href="precios-mayoristas.png" target="_blank">PRECIOS MAYORISTA</a></li>
                 </ul>
             </nav>
     </header>
@@ -886,7 +891,7 @@
 
         <div class="footer__content-bottom">
             <div class="footer__copyright">
-                <small>© 2025 MPatitas Comodas</small>
+                <small>© 2026 MPatitas Comodas</small>
             </div>
         </div>
     </footer>
@@ -894,6 +899,7 @@
     <script>
         const menuBtn = document.getElementById('header-left');
         const navMenu = document.getElementById('nav-menu');
+        const closeMenuX =document.getElementById('close-menu');
         const searchBtn = document.getElementById('search-trigger');
         const searchBar = document.getElementById('search-bar');
         const searchInput = document.getElementById('search-input');
@@ -1052,10 +1058,16 @@
         });
 
         // RESTO DE FUNCIONES (MENÚ, LUPA, ETC)
+
         if (menuBtn && navMenu) {
             menuBtn.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
                 menuBtn.classList.toggle('open');
+            });
+        }
+        if (closeMenuX && navMenu) {
+            closeMenuX.addEventListener('click', () => {
+                navMenu.classList.remove('active');
             });
         }
         if (searchBtn && searchBar) {
