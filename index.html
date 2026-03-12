@@ -32,8 +32,10 @@
 
     <div class="announcement-delivery">
         <div class="envio">
-            <span>¡Estrena medias hoy! Envíos gratis por compras superiores a $50.000 🚚</span>
-            <span>¡Estrena medias hoy! Envíos gratis por compras superiores a $50.000 🚚</span>
+            <span>¡Envios a todo el pais!</span>
+            <span>¡Ventas al por mayor!</span>
+            <span>¡Envio gratis por compras mayores a $50.000!</span>
+            <span>¡10% de descuento en tu primera compra!</span>
         </div>
     </div>
 
@@ -106,40 +108,62 @@
                 <li><a href="personajes.html">PERSONAJES</a></li>
                 <li><a href="niños.html">NIÑOS</a></li>
                 <li><a href="boleros.html">BOLERAS</a></li>
+                <li><a href="promos.html">PROMOS</a></li>
                 <li><a href="precios-mayoristas.png" target="_blank">PRECIOS MAYORISTA</a></li>            
             </ul>
         </nav>
     </header>
 
-    <section class="product-gallery">
-        <div class="gallery-grid">
-            <div class="product-card">
-                <img src="promo-img-background.png"  alt="Imagen De Promociones 20%" fetchpriority="high">
-            </div>
-        </div>
-
-        <div class="gallery-action">
-            <a href="promos.html" class="btn-buy">VER PROMOS</a>
-        </div>
-
-    </section>
-
     <section class="product-grid-container">
-        <h3>Nuestros Destacados</h3>
-        <div class="product-grid">
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="tobillera-adidas-NG.PNG" loading="lazy" alt="">
-                    <span class="badge">NUEVO</span>
+        <h3>Productos Destacados</h3>
+        <div class="slider-container">
+            <button class="slider-btn prev" id="prev-btn">&#10094;</button>
+        
+            <div class="slider-wrapper">
+                <div class="product-card active">
+                    <div class="product-image">
+                        <img src="larga-adidas-3lineas-BL.PNG" loading="lazy" alt="Tobillera Adidas Negra">
+                        <span class="badge">NUEVO</span>
+                    </div>
                 </div>
-            </div>
+            
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="talonera-under-BL.png" loading="lazy" alt="Media Larga Adidas">
+                        <span class="badge">NUEVO</span>
+                    </div>
+                </div>
 
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="larga-adidas-doblecolor-BLNG.PNG" loading="lazy" alt="">
-                    <span class="badge">NUEVO</span>
+                 <div class="product-card">
+                    <div class="product-image">
+                        <img src="antideslizante-larga-BS.PNG" loading="lazy" alt="Media Larga Adidas">
+                        <span class="badge">NUEVO</span>
+                    </div>
+                </div>
+
+                 <div class="product-card">
+                    <div class="product-image">
+                        <img src="capibara-ovejera-BL.jpeg" loading="lazy" alt="Media Larga Adidas">
+                        <span class="badge">NUEVO</span>
+                    </div>
+                </div>
+
+                 <div class="product-card">
+                    <div class="product-image">
+                        <img src="stranger-thinks-01.PNG" loading="lazy" alt="Media Larga Adidas">
+                        <span class="badge">NUEVO</span>
+                    </div>
+                </div>
+
+                 <div class="product-card">
+                    <div class="product-image">
+                        <img src="boleros-moño2-BL.PNG" loading="lazy" alt="Media Larga Adidas">
+                        <span class="badge">NUEVO</span>
+                    </div>
                 </div>
             </div>
+        
+            <button class="slider-btn next" id="next-btn">&#10095;</button>
         </div>
     </section>
 
@@ -222,6 +246,10 @@
         const cartCountElement = document.querySelector('.cart-count');
         const cartItemsContainer = document.getElementById('cart-items-container');
         const checkoutBtn = document.getElementById('checkout-whatsapp');
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        const productCards = document.querySelectorAll('.slider-wrapper .product-card');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
 
         // ESTADO DEL CARRITO
         let cart = JSON.parse(localStorage.getItem('mpatittas_cart')) || [];
@@ -408,6 +436,39 @@
         if (overlay) overlay.onclick = () => toggleCart(false);
 
         window.updateCartUI();
+
+        // Slider productos destacados
+    
+        let currentSlide = 0; 
+
+        function showSlide(n) {
+            if (n >= productCards.length) {
+                currentSlide = 0; 
+            } else if (n < 0) {
+                currentSlide = productCards.length - 1; // Va al final si retrocede desde el principio
+            } else {
+                currentSlide = n;
+            }
+
+            productCards.forEach(card => card.classList.remove('active'));
+        
+            productCards[currentSlide].classList.add('active');
+        }
+
+        // botones para cambiar de imagen
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                showSlide(currentSlide - 1);
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                showSlide(currentSlide + 1);
+            });
+        }
+
+        showSlide(currentSlide);
     </script>
 </body>
 </html>
