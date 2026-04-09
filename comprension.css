@@ -231,6 +231,44 @@ header{
     transition: 0.3s;
 }
 
+/* menu hamburguesa */
+
+.submenu {
+    display: none; /* Oculto por defecto */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #f9f9f9; 
+}
+
+#nav-menu ul li .submenu li a {
+    padding: 12px 45px; 
+    font-size: 14px; 
+    color: #666; 
+    border-bottom: none;
+    text-transform: capitalize; /* Convierte 'MUJER' en 'Mujer' */
+    font-weight: 400; 
+}
+
+
+.submenu.is-open {
+    display: block;
+}
+
+.has-children > .toggle-menu::after {
+    content: '+';
+    float: right;
+    font-size: 18px;
+    font-weight: 300;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+}
+
+.has-children > .toggle-menu.active::after {
+    content: '-';
+    transform: rotate(180deg);
+}
+
 #nav-menu{
     display: none;
     position: fixed;
@@ -291,6 +329,7 @@ header{
     text-transform: uppercase;
     letter-spacing: 1.2px;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 #nav-menu ul li a:hover{

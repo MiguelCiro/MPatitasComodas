@@ -90,23 +90,37 @@
             </div>
         </div>    
             
-            <nav id="nav-menu">
-                <div class="menu-header-black">
-                    <span id="close-menu">&times;</span>
-                </div>
-                <ul>
-                    <li><a href="index.html">INICIO</a></li>
-                    <li><a href="largas.html">LARGAS</a></li>
-                    <li><a href="cortas.html">CORTAS</a></li>
-                    <li><a href="deportivas.html">ANTIDESLIZANTES</a></li>
-                    <li><a href="calentadoras.html">OVEJERAS</a></li>
-                    <li><a href="compresion.html">COMPRESIÓN</a></li>
-                    <li><a href="personajes.html">PERSONAJES</a></li>
-                    <li><a href="boleros.html">BOLEROS</a></li>
-                    <li><a href="promos.html">PROMOS</a></li>
-                    <li><a href="precios-mayoristas.png" target="_blank">PRECIOS MAYORISTA</a></li>
-                </ul>
-            </nav>
+        <nav id="nav-menu">
+            <div class="menu-header-black">
+                <span id="close-menu">&times;</span>
+            </div>
+            <ul>
+                <li><a href="index.html">INICIO</a></li>
+                <li class="has-children">
+                    <a href="#" class="toggle-menu">LARGAS</a>
+                    <ul class="submenu">
+                        <li><a href="largas-hombre.html">Hombre</a></li>
+                        <li><a href="largas-mujer.html">Mujer</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-children">
+                    <a href="#" class="toggle-menu">CORTAS</a>
+                    <ul class="submenu">
+                        <li><a href="cortas-hombre.html">Hombre</a></li>
+                        <li><a href="cortas-mujer.html">Mujer</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="deportivas.html">ANTIDESLIZANTES</a></li>
+                <li><a href="calentadoras.html">OVEJERAS</a></li>
+                <li><a href="compresion.html">COMPRESIÓN</a></li>
+                <li><a href="personajes.html">PERSONAJES</a></li>
+                <li><a href="boleros.html">BOLERAS</a></li>
+                <li><a href="promos.html">PROMOS</a></li>
+                <li><a href="precios-mayoristas.png" target="_blank">PRECIOS MAYORISTA</a></li>              
+            </ul>
+        </nav>
     </header>
 
 
@@ -292,10 +306,14 @@
         </div>
     </footer>
 
-    <script>
+     <script>
+        // ESTADO GLOBAL Y SELECTORES
+
+        let cart = JSON.parse(localStorage.getItem('mpatittas_cart')) || [];
+
         const menuBtn = document.getElementById('header-left');
         const navMenu = document.getElementById('nav-menu');
-        const closeMenuX =document.getElementById('close-menu');
+        const closeMenuX = document.getElementById('close-menu');
         const searchBtn = document.getElementById('search-trigger');
         const searchBar = document.getElementById('search-bar');
         const searchInput = document.getElementById('search-input');
@@ -309,10 +327,33 @@
         const cartItemsContainer = document.getElementById('cart-items-container');
         const checkoutBtn = document.getElementById('checkout-whatsapp');
 
-        // ESTADO DEL CARRITO
-        let cart = JSON.parse(localStorage.getItem('mpatittas_cart')) || [];
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        const productCards = document.querySelectorAll('.slider-wrapper .product-card');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
 
-        // FUNCIONES DE INTERFAZ
+        // SISTEMA DE ACORDEÓN (LARGAS Y CORTAS)
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggles = document.querySelectorAll('.toggle-menu');
+
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault(); 
+                    
+                    // Alterna clase para la flecha en CSS
+                    this.classList.toggle('active');
+                    
+                    // Encuentra el submenú hermano (ul.submenu)
+                    const submenu = this.nextElementSibling;
+                    if (submenu) {
+                        submenu.classList.toggle('is-open');
+                    }
+                });
+            });
+        });
+
+        
+        //LÓGICA DEL CARRITO DE COMPRAS
         const toggleCart = (show) => {
             if(show) {
                 sideCart.classList.add('active');
@@ -346,7 +387,6 @@
                     </div>
                 `).join('');
 
-                // CONTADOR DE DINERO POR MILES ($15.000)
                 itemsHtml += `
                     <div class="cart-total-section" style="margin-top:20px; padding:15px; background:#fff0f5; border-radius:8px; text-align:right; border: 1px dashed #e91e63;">
                         <p style="margin:0; font-family:sans-serif; color:#666; font-size: 0.9em;">Total de tu pedido:</p>
@@ -358,11 +398,8 @@
             }
         };
 
-        // LÓGICA DE PRODUCTOS
         window.addToCart = (id, name, price, color = "Único") => {
-            // Limpieza profunda de precio para asegurar que sea un número operable
             const numericPrice = typeof price === 'string' ? parseFloat(price.replace(/[^0-9]/g,"")) : price;
-            
             const uniqueId = `${id}-${color.replace(/\s+/g, '')}`;
             
             const existing = cart.find(i => i.id === uniqueId);
@@ -380,10 +417,10 @@
             window.updateCartUI();
         };
 
-        // EVENTOS (Clicks)
+        
+        // EVENTOS DE COMPRA Y WHATSAPP
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-add-cart');
-
             if (btn && btn.id !== 'checkout-whatsapp') {
                 const id = btn.dataset.id;
                 const name = btn.dataset.name;
@@ -394,12 +431,10 @@
                     alert("¡Por favor selecciona un color haciendo clic en los círculos de colores! ✨");
                     return;
                 }
-
                 window.addToCart(id, name, price, color);
             }
         });
 
-        // CHECKOUT WHATSAPP CON TOTAL POR MILES
         if (checkoutBtn) {
             checkoutBtn.onclick = () => {
                 if (cart.length === 0) return alert("Tu carrito está vacío");
@@ -410,7 +445,6 @@
                 const totalPrice = subtotalProductos + costoEnvio;
                 
                 let msg = "¡Hola, equipo MPatitas! 🧦✨\n\nAcabo de armar mi pedido en la web:\n\n";
-                
                 cart.forEach(i => {
                     msg += `✅ ${i.quantity}x ${i.name}\n     ● Color: ${i.color}\n   ● Subtotal: $${(i.price * i.quantity).toLocaleString('es-CO')}\n\n`;
                 });
@@ -425,7 +459,7 @@
             };
         }
 
-        // LÓGICA DE BOLITAS (CAPTURA EL COLOR DE TU HTML)
+        // Lógica de selección de colores (Bolitas)
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('dot')) {
                 const dotSeleccionado = e.target;
@@ -453,12 +487,14 @@
             }
         });
 
-        // RESTO DE FUNCIONES (MENÚ, LUPA, ETC)
+        // ==========================================
+        // 5. NAVEGACIÓN, BUSCADOR Y SLIDER
+        // ==========================================
 
+        // Menú Lateral (Hamburguesa)
         if (menuBtn && navMenu) {
             menuBtn.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
-                menuBtn.classList.toggle('open');
             });
         }
         if (closeMenuX && navMenu) {
@@ -466,6 +502,8 @@
                 navMenu.classList.remove('active');
             });
         }
+
+        // Buscador
         if (searchBtn && searchBar) {
             searchBtn.addEventListener('click', () => {
                 searchBar.classList.add('active');
@@ -483,16 +521,33 @@
                     const query = searchInput.value.trim();
                     if (query.length > 2) {
                         window.location.href = `buscar.html?q=${encodeURIComponent(query)}`;
-                    } else {
-                        alert("Por favor, escribe al menos 3 letras.");
                     }
                 }
             });
         }
+
+        // Triggers del Carrito
         if (cartTrigger) cartTrigger.onclick = () => toggleCart(true);
         if (closeCartBtn) closeCartBtn.onclick = () => toggleCart(false);
         if (overlay) overlay.onclick = () => toggleCart(false);
 
+        // Slider de Productos Destacados
+        let currentSlide = 0; 
+        function showSlide(n) {
+        if (productCards.length === 0) return;
+        if (n >= productCards.length) currentSlide = 0;
+        else if (n < 0) currentSlide = productCards.length - 1;
+        else currentSlide = n;
+
+        productCards.forEach(card => card.classList.remove('active'));
+        productCards[currentSlide].classList.add('active');
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+
+        // Inicialización
+        showSlide(currentSlide);
         window.updateCartUI();
     </script>
 </body>

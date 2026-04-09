@@ -87,7 +87,6 @@ header{
     z-index: 5000;
 }
 
-
 .search-overlay.active { 
     top: 0; 
 }
@@ -126,48 +125,6 @@ header{
     box-shadow: -5px 0 15px rgba(0,0,0,0.1);
 }
 
-
-/* Contenedor del título "TU CARRITO" */
-.cart-header {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.cart-header h3 {
-    margin: 0;
-    font-size: 16px;
-    letter-spacing: 1px;
-}
-
-/* Cuerpo del carrito y mensaje de vacío */
-.cart-body {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-}
-
-.cart-empty-msg {
-    text-align: center;
-    color: #757575; /* Mejorado para accesibilidad */
-    margin-top: 50px;
-}
-
-/* Contenedor del botón inferior */
-.cart-footer {
-    padding: 20px;
-    border-top: 1px solid #eee;
-}
-
-/* Ajuste para el botón de WhatsApp */
-.btn-whatsapp-checkout {
-    width: 100%;
-    margin: 0;
-}
-
-
 .cart-sidebar.active { 
     right: 0; 
 }
@@ -200,6 +157,7 @@ header{
 .close-btn:hover {
     color: #e91e63; /* Color rosa de tu logo */
 }
+
 
 /*CARRITO INSIDE*/
 .cart-item {
@@ -249,6 +207,13 @@ header{
     background-color: #e91e63; 
 }
 
+.dot {
+    background-size: cover;
+    background-position: center;
+}
+
+
+
 /*HEADER Y TITULO*/
 
 .header-logo{
@@ -256,7 +221,6 @@ header{
     display: flex;
     justify-content: center;
 }
-
 
 .header-left{
     display: flex;
@@ -313,7 +277,6 @@ header{
     transform: rotate(180deg);
 }
 
-
 #nav-menu{
     display: none;
     position: fixed;
@@ -325,7 +288,6 @@ header{
     height: 100vh;
     overflow-y: auto;
 }
-
 
 #nav-menu.active{
     display: block;
@@ -400,7 +362,7 @@ header{
     border: none;
     padding: 0;
     cursor: pointer;
-    position: relative; 
+    position: relative; /* Para posicionar el contador */
     color: #333;
     display: flex;
     align-items: center;
@@ -467,114 +429,142 @@ header{
     }
 }
 
-/*section1*/
-.product-grid-container { 
-    padding: 40px 5%; 
+/* SECCION DE PRODUCTOS */
+
+/* Configuración de la Sección */
+.category-section {
+    padding: 40px 15px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.product-grid-container h3 { 
-    margin-bottom: 30px; 
-    text-align: center; 
+.section-title {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
 }
 
-.product-grid {
+/* El Grid: 2 columnas en móviles */
+.products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(2, 1fr); /* Fuerza 2 columnas */
+    gap: 15px;
 }
 
+/* La Tarjeta de Producto */
 .product-card {
-    background: white;
-    border: 1px solid #eee;
-    transition: 0.3s;
+    background: #fff;
     text-align: center;
 }
 
-.product-card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
-.product-image { background-color: #f7f7f7; 
+.product-image-container {
+    background-color: #f7f7f7; 
     position: relative;
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border-radius: 4px; }
+    border-radius: 4px;
+}
 
-.product-image img { width: 120%;
+.product-image-container img {
+    width: 120%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transition: transform 0.3s ease; }
+    transition: transform 0.3s ease;
+}
 
-.badge {
+.product-card:hover .product-image-container img {
+    transform: scale(1.05);
+}
+
+/* Botones que aparecen sobre la imagen */
+.product-overlay-btns {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #e91e63;
-    color: white;
-    padding: 5px 10px;
-    font-size: 0.7rem;
-}
-
-.slider-container {
-    position: relative;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    overflow: hidden; 
-}
-
-
-.slider-wrapper {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    transition: transform 0.5s ease; 
+    gap: 8px;
+    opacity: 0.9;
 }
 
-
-.slider-wrapper .product-card {
-    min-width: 100%; 
-    box-sizing: border-box;
-    display: none; 
-}
-
-
-.slider-wrapper .product-card.active {
-    display: block;
-}
-
-.slider-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+.product-overlay-btns button {
+    background: white;
     border: none;
-    padding: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 18px;
-    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.slider-btn.prev {
-    left: 10px;
+/* Detalles del Texto */
+.product-details {
+    padding: 10px 5px;
 }
 
-.slider-btn.next {
-    right: 10px;
+.product-name {
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+    margin: 5px 0;
+    line-height: 1.2;
+    height: 32px; 
+    overflow: hidden;
 }
 
+.product-price {
+    font-weight: bold;
+    font-size: 15px;
+    color: #000;
+    margin: 5px 0;
+}
 
-.add-to-cart {
-    width: 100%;
-    padding: 10px;
-    background: #000;
-    color: white;
-    border: none;
+/* Selectores de Color (Bolitas) */
+.color-options {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+}
+.white { background: white; }
+.black { background: black; }
+.gray  { background: gray; }
+.blue  { background: blue; }
+.red   { background: red; }
+.pink { background: pink;}
+.brown { background: rgb(192, 120, 69);}
+.green2 {background: greenyellow;}
+.green {background: green;}
+.blue2 {background: rgb(160, 160, 255);}
+.yellow {background: yellow;}
+.gray2{background: rgb(64, 64, 64);}
+.turquesa{background: turquoise;}
+.purple{background: purple;}
+.orange {background: rgb(240, 204, 137);}
+
+.dot {
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-/*footer*/
+.dot:hover {
+    transform: scale(1.2);
+    border-color: #000;
+}
+
 .footer {
   border-top: 1px solid #e0e0e0;
   background-color: #ffffff;
@@ -670,3 +660,25 @@ header{
   text-transform: uppercase;
 }
 
+@media (min-width: 769px) {
+    .hamburger {
+        display: none; /* Desaparecen las rayitas en PC */
+    }
+
+    #mobile-nav {
+        display: block; /* Siempre visible en PC */
+        position: static; /* Vuelve a su lugar en la línea */
+        width: auto;
+        box-shadow: none;
+    }
+
+    #nav-list ul {
+        display: flex; /* Se pone en línea horizontal */
+        padding: 0;
+    }
+
+    #nav-list ul li {
+        border-bottom: none;
+        padding: 0 15px;
+    }
+}
