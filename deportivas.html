@@ -428,17 +428,24 @@
                 if (cart.length === 0) return alert("Tu carrito está vacío");
                 
                 const tel = "573248343679"; 
-                const costoEnvio = 5000;
+                const costoEnvio = 8000;
                 const subtotalProductos = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
                 const totalPrice = subtotalProductos + costoEnvio;
                 
+                // CONTADOR DE PARES
+                const totalPares = cart.reduce((acc, item) => acc + item.quantity, 0);
+                // ---------------------------------
+                
                 let msg = "¡Hola, equipo MPatitas! 🧦✨\n\nAcabo de armar mi pedido en la web:\n\n";
+                
                 cart.forEach(i => {
                     msg += `✅ ${i.quantity}x ${i.name}\n     ● Color: ${i.color}\n   ● Subtotal: $${(i.price * i.quantity).toLocaleString('es-CO')}\n\n`;
                 });
                 
                 msg += `--------------------------\n`;
-                msg += `🚚 Valor Domicilio: $${costoEnvio.toLocaleString('es-CO')}\n`;
+                // Insertamos el contador aquí
+                msg += `📦 *Total de pares:* ${totalPares}\n`; 
+                msg += `🚚 Valor Domicilio: $${costoEnvio.toLocaleString('es-CO')}\n\n (Puede variar segun tu ubicacion)\n\n`;
                 msg += `🚀 *TOTAL A PAGAR: $${totalPrice.toLocaleString('es-CO')}*\n`;
                 msg += `--------------------------\n`;
                 msg += "\n📍 ¿Me confirman disponibilidad? ¡Gracias! 🧦💖";

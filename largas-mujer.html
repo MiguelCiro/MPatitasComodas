@@ -763,6 +763,25 @@
                     </div>
                 </div>
             </div>
+
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="logo-nike-dorado-BL.PNG" loading="lazy" alt="Nike Bordado Negro">
+                    <div class="product-overlay-btns">
+                        <button class="btn-add-cart" data-id="c-033" data-name="Logo Nike Dorado" data-price="9.000">
+                            🛒
+                        </button>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h3 class="product-name">Logo Nike Dorado</h3>
+                    <p class="product-price">$9.000,00</p>
+                    <div class="color-options">
+                        <span class="dot white" data-img="logo-nike-dorado-BL.PNG" data-color="Blanco"></span>
+                        <span class="dot black" data-img="logo-nike-dorado-NG.PNG" data-color="Negro"></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -959,17 +978,24 @@
                 if (cart.length === 0) return alert("Tu carrito está vacío");
                 
                 const tel = "573248343679"; 
-                const costoEnvio = 5000;
+                const costoEnvio = 8000;
                 const subtotalProductos = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
                 const totalPrice = subtotalProductos + costoEnvio;
                 
+                // CONTADOR DE PARES
+                const totalPares = cart.reduce((acc, item) => acc + item.quantity, 0);
+                // ---------------------------------
+                
                 let msg = "¡Hola, equipo MPatitas! 🧦✨\n\nAcabo de armar mi pedido en la web:\n\n";
+                
                 cart.forEach(i => {
                     msg += `✅ ${i.quantity}x ${i.name}\n     ● Color: ${i.color}\n   ● Subtotal: $${(i.price * i.quantity).toLocaleString('es-CO')}\n\n`;
                 });
                 
                 msg += `--------------------------\n`;
-                msg += `🚚 Valor Domicilio: $${costoEnvio.toLocaleString('es-CO')}\n`;
+                // Insertamos el contador aquí
+                msg += `📦 *Total de pares:* ${totalPares}\n`; 
+                msg += `🚚 Valor Domicilio: $${costoEnvio.toLocaleString('es-CO')}\n\n (Puede variar segun tu ubicacion)\n\n`;
                 msg += `🚀 *TOTAL A PAGAR: $${totalPrice.toLocaleString('es-CO')}*\n`;
                 msg += `--------------------------\n`;
                 msg += "\n📍 ¿Me confirman disponibilidad? ¡Gracias! 🧦💖";
