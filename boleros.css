@@ -542,6 +542,7 @@ header{
 .white { background: white; }
 .black { background: black; }
 .gray  { background: gray; }
+.blue2 {background: rgb(132, 132, 255);}
 .blue  { background: blue; }
 .red   { background: red; }
 .blue2 { background: rgb(105, 105, 202);}
