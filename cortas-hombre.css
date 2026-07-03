@@ -722,17 +722,10 @@ header{
 
 
 .price-original {
-    font-size: 0.9rem;
-    color: #b5b5b5; /* Gris claro */
-    text-decoration: line-line-through; /* Equivalente al overline/strike que querías */
-    text-decoration: line-through; 
-}
-
-.price-discount {
     font-size: 1.1rem;
     color: #000000; /* Color destacado o negro para el precio final */
     font-weight: bold;
-    margin-top: 2px;
+    margin-top: 2px; 
 }
 
 .badge {
