@@ -517,6 +517,103 @@ header{
     font-size: 0.7rem;
 }
 
+/* SECCIÓN PROMOCIONAL KURUMI */
+.promo-kurumi-container {
+    padding: 40px 5%;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.promo-kurumi-content {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.promo-badge {
+    background: #e91e63;
+    color: white;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.promo-title {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 1.6rem;
+    color: #000;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.promo-description {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+.promo-image-box {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border: 1px solid #eee;
+    margin-bottom: 25px;
+    background-color: #f7f7f7;
+    aspect-ratio: 1 / 1; /* Mantiene la imagen perfectamente cuadrada */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.promo-kurumi-img {
+    width: 60%;
+    height: 100%;
+    object-fit: cover; /* Hace que la imagen llene el espacio de forma estética */
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.promo-kurumi-img:hover {
+    transform: scale(1.02); /* Efecto sutil de zoom al pasar el mouse */
+}
+
+.btn-promo-action {
+    display: inline-block;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 35px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+}
+
+.btn-promo-action:hover {
+    background-color: #e91e63;
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .promo-title {
+        font-size: 1.3rem;
+    }
+    .promo-kurumi-container {
+        padding: 30px 20px;
+    }
+}
+
 .slider-container {
     position: relative;
     width: 100%;
