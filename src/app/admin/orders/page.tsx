@@ -53,6 +53,10 @@ export default function OrdersPage() {
 
         <>
 
+            {/* =============================== */}
+            {/* ENCABEZADO */}
+            {/* =============================== */}
+
             <div className="mb-10 flex items-center justify-between">
 
                 <div>
@@ -73,9 +77,12 @@ export default function OrdersPage() {
 
             </div>
 
-            {/* Buscador */}
 
-            <div className="mb-8 relative">
+            {/* =============================== */}
+            {/* BUSCADOR */}
+            {/* =============================== */}
+
+            <div className="relative mb-8">
 
                 <Search
                     size={20}
@@ -93,117 +100,159 @@ export default function OrdersPage() {
 
             </div>
 
-            <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
 
-                <table className="w-full">
+            {/* =============================== */}
+            {/* TABLA */}
+            {/* =============================== */}
 
-                    <thead>
+            <div className="rounded-3xl bg-white shadow-sm">
 
-                        <tr className="border-b bg-gray-50 text-left text-sm uppercase tracking-wide text-gray-500">
+                {/* 
+                    Este contenedor permite desplazamiento
+                    horizontal en dispositivos pequeños.
+                */}
 
-                            <th className="px-6 py-5">
+                <div className="overflow-x-auto">
 
-                                Pedido
+                    <table className="w-full min-w-[900px]">
 
-                            </th>
+                        <thead>
 
-                            <th>
+                            <tr className="border-b bg-gray-50 text-left text-sm uppercase tracking-wide text-gray-500">
 
-                                Cliente
+                                <th className="px-6 py-5">
 
-                            </th>
+                                    Pedido
 
-                            <th>
+                                </th>
 
-                                Ciudad
+                                <th className="px-6 py-5">
 
-                            </th>
+                                    Cliente
 
-                            <th>
+                                </th>
 
-                                Total
+                                <th className="px-6 py-5">
 
-                            </th>
+                                    Ciudad
 
-                            <th>
+                                </th>
 
-                                Estado
+                                <th className="px-6 py-5">
 
-                            </th>
+                                    Total
 
-                            <th className="text-center">
+                                </th>
 
-                                Acción
+                                <th className="px-6 py-5">
 
-                            </th>
+                                    Estado
 
-                        </tr>
+                                </th>
 
-                    </thead>
+                                <th className="px-6 py-5 text-center">
 
-                    <tbody>
+                                    Acción
 
-                        {filteredOrders.map((order) => (
-
-                            <tr
-                                key={order.id}
-                                className="border-b hover:bg-gray-50"
-                            >
-
-                                <td className="px-6 py-5 font-bold">
-
-                                    #{order.id}
-
-                                </td>
-
-                                <td>
-
-                                    {order.customer_name}
-
-                                </td>
-
-                                <td>
-
-                                    {order.city}
-
-                                </td>
-
-                                <td className="font-semibold">
-
-                                    ${Number(order.total).toLocaleString("es-CO")}
-
-                                </td>
-
-                                <td>
-
-                                    <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-700">
-
-                                        {order.status}
-
-                                    </span>
-
-                                </td>
-
-                                <td className="text-center">
-
-                                    <Link
-                                        href={`/admin/orders/${order.id}`}
-                                        className="inline-flex rounded-xl bg-black p-3 text-white transition hover:bg-red-600"
-                                    >
-
-                                        <Eye size={18} />
-
-                                    </Link>
-
-                                </td>
+                                </th>
 
                             </tr>
 
-                        ))}
+                        </thead>
 
-                    </tbody>
 
-                </table>
+                        <tbody>
+
+                            {filteredOrders.map((order) => (
+
+                                <tr
+                                    key={order.id}
+                                    className="border-b hover:bg-gray-50"
+                                >
+
+                                    <td className="px-6 py-5 font-bold">
+
+                                        #{order.id}
+
+                                    </td>
+
+
+                                    <td className="px-6 py-5">
+
+                                        {order.customer_name}
+
+                                    </td>
+
+
+                                    <td className="px-6 py-5">
+
+                                        {order.city}
+
+                                    </td>
+
+
+                                    <td className="px-6 py-5 font-semibold">
+
+                                        $
+                                        {Number(order.total).toLocaleString(
+                                            "es-CO"
+                                        )}
+
+                                    </td>
+
+
+                                    <td className="px-6 py-5">
+
+                                        <span className="whitespace-nowrap rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-700">
+
+                                            {order.status}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td className="px-6 py-5 text-center">
+
+                                        <Link
+                                            href={`/admin/orders/${order.id}`}
+                                            className="inline-flex rounded-xl bg-black p-3 text-white transition hover:bg-red-600"
+                                            title="Ver pedido"
+                                        >
+
+                                            <Eye size={18} />
+
+                                        </Link>
+
+                                    </td>
+
+                                </tr>
+
+                            ))}
+
+
+                            {filteredOrders.length === 0 && (
+
+                                <tr>
+
+                                    <td
+                                        colSpan={6}
+                                        className="px-6 py-10 text-center text-gray-500"
+                                    >
+
+                                        No se encontraron pedidos.
+
+                                    </td>
+
+                                </tr>
+
+                            )}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             </div>
 
