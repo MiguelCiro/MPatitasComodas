@@ -12,7 +12,8 @@ type CartContextType = {
 
   addToCart: (
     product: Product,
-    size: number
+    size: number,
+    quantity?: number
   ) => void;
 
   removeFromCart: (

@@ -1,8 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-import { CartContext, CartItem } from "./CartContext";
+import {
+  CartContext,
+  CartItem,
+} from "./CartContext";
+
 import { Product } from "@/types/product";
 
 export default function CartProvider({
@@ -10,7 +18,6 @@ export default function CartProvider({
 }: {
   children: React.ReactNode;
 }) {
-
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -19,15 +26,16 @@ export default function CartProvider({
   // =====================================
 
   useEffect(() => {
-
-    const savedCart = localStorage.getItem("cart");
+    const savedCart =
+      localStorage.getItem("cart");
 
     if (savedCart) {
-
-      setCart(JSON.parse(savedCart));
-
+      try {
+        setCart(JSON.parse(savedCart));
+      } catch {
+        localStorage.removeItem("cart");
+      }
     }
-
   }, []);
 
   // =====================================
@@ -35,12 +43,10 @@ export default function CartProvider({
   // =====================================
 
   useEffect(() => {
-
     localStorage.setItem(
       "cart",
       JSON.stringify(cart)
     );
-
   }, [cart]);
 
   // =====================================
@@ -48,15 +54,11 @@ export default function CartProvider({
   // =====================================
 
   function openCart() {
-
     setIsCartOpen(true);
-
   }
 
   function closeCart() {
-
     setIsCartOpen(false);
-
   }
 
   // =====================================
@@ -64,80 +66,69 @@ export default function CartProvider({
   // =====================================
 
   function addToCart(
-    product: Product,
-    size: number
-  ) {
+  product: Product,
+  size: number,
+  quantity: number = 1
+) {
+  if (!size) {
+    alert("Selecciona una talla.");
+    return;
+  }
 
-    if (!size) {
+  if (quantity < 1) {
+    return;
+  }
 
-      alert("Selecciona una talla.");
+  setCart((currentCart) => {
+    const existingProduct = currentCart.find(
+      (item) =>
+        item.id === product.id &&
+        item.size === size
+    );
 
-      return;
+    if (existingProduct) {
+      const newQuantity =
+        existingProduct.quantity + quantity;
 
-    }
-
-    setCart((currentCart) => {
-
-      const existingProduct = currentCart.find(
-
-        (item) =>
-
-          item.id === product.id &&
-          item.size === size
-
-      );
-
-      if (existingProduct) {
-
-        if (
-          existingProduct.quantity >= product.stock
-        ) {
-
-          alert(
-            "No hay más unidades disponibles."
-          );
-
-          return currentCart;
-
-        }
-
-        return currentCart.map((item) =>
-
-          item.id === product.id &&
-          item.size === size
-
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-              }
-
-            : item
-
+      if (newQuantity > product.stock) {
+        alert(
+          `Solo hay ${product.stock} unidades disponibles.`
         );
 
+        return currentCart;
       }
 
-      return [
+      return currentCart.map((item) =>
+        item.id === product.id &&
+        item.size === size
+          ? {
+              ...item,
+              quantity: newQuantity,
+            }
+          : item
+      );
+    }
 
-        ...currentCart,
+    if (quantity > product.stock) {
+      alert(
+        `Solo hay ${product.stock} unidades disponibles.`
+      );
 
-        {
+      return currentCart;
+    }
 
-          ...product,
+    return [
+      ...currentCart,
+      {
+        ...product,
+        size,
+        quantity,
+      },
+    ];
+  });
 
-          size,
-
-          quantity: 1,
-
-        },
-
-      ];
-
-    });
-
-    openCart();
-
-  }
+  openCart();
+}
 
   // =====================================
   // Eliminar producto
@@ -147,24 +138,15 @@ export default function CartProvider({
     id: number,
     size: number
   ) {
-
     setCart((currentCart) =>
-
       currentCart.filter(
-
         (item) =>
-
           !(
-
             item.id === id &&
             item.size === size
-
           )
-
       )
-
     );
-
   }
 
   // =====================================
@@ -175,43 +157,28 @@ export default function CartProvider({
     id: number,
     size: number
   ) {
-
     setCart((currentCart) =>
-
       currentCart.map((item) => {
-
         if (
-
           item.id === id &&
           item.size === size
-
         ) {
-
           if (
             item.quantity >= item.stock
           ) {
-
             return item;
-
           }
 
           return {
-
             ...item,
-
             quantity:
               item.quantity + 1,
-
           };
-
         }
 
         return item;
-
       })
-
     );
-
   }
 
   // =====================================
@@ -222,35 +189,22 @@ export default function CartProvider({
     id: number,
     size: number
   ) {
-
     setCart((currentCart) =>
-
       currentCart
-
         .map((item) =>
-
           item.id === id &&
           item.size === size
-
             ? {
-
                 ...item,
-
                 quantity:
                   item.quantity - 1,
-
               }
-
             : item
-
         )
-
         .filter(
           (item) => item.quantity > 0
         )
-
     );
-
   }
 
   // =====================================
@@ -258,49 +212,41 @@ export default function CartProvider({
   // =====================================
 
   function clearCart() {
-
     setCart([]);
-
   }
 
   // =====================================
-  // Totales
+  // Total de productos
   // =====================================
 
   const totalItems = useMemo(() => {
-
     return cart.reduce(
-
       (acc, item) =>
-
         acc + item.quantity,
-
       0
-
     );
-
   }, [cart]);
+
+  // =====================================
+  // Subtotal
+  // =====================================
 
   const subtotal = useMemo(() => {
-
     return cart.reduce(
-
       (acc, item) =>
-
         acc +
         item.price * item.quantity,
-
       0
-
     );
-
   }, [cart]);
 
-  return (
+  // =====================================
+  // Provider
+  // =====================================
 
+  return (
     <CartContext.Provider
       value={{
-
         cart,
 
         addToCart,
@@ -322,14 +268,9 @@ export default function CartProvider({
         openCart,
 
         closeCart,
-
       }}
     >
-
       {children}
-
     </CartContext.Provider>
-
   );
-
 }

@@ -124,72 +124,137 @@ export default function NewProductPage() {
     setPreview(URL.createObjectURL(file));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+ async function handleSubmit(
+      e: React.FormEvent
+    ) {
+      e.preventDefault();
 
-    if (!product.name.trim()) {
-      alert("Escribe el nombre del producto.");
-      return;
-    }
-
-    if (!product.brand_id) {
-      alert("Selecciona una marca.");
-      return;
-    }
-
-    if (!product.category_id) {
-      alert("Selecciona una categoría.");
-      return;
-    }
-
-    if (!product.price || Number(product.price) <= 0) {
-      alert("Ingresa un precio válido.");
-      return;
-    }
-
-    if (!product.stock || Number(product.stock) < 0) {
-      alert("Ingresa un stock válido.");
-      return;
-    }
-
-    if (product.sizes.length === 0) {
-      alert("Selecciona al menos una talla.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      let imageUrl = product.image;
-
-      if (imageFile) {
-        imageUrl = await uploadProductImage(imageFile);
+      if (!product.name.trim()) {
+        alert("Escribe el nombre del producto.");
+        return;
       }
 
-      await createProduct({
-        name: product.name.trim(),
-        slug: product.slug,
-        description: product.description.trim(),
-        image: imageUrl,
-        price: Number(product.price),
-        stock: Number(product.stock),
-        featured: product.featured,
-        brand_id: Number(product.brand_id),
-        category_id: Number(product.category_id),
-        sizes: product.sizes,
-      });
+      if (!product.slug.trim()) {
+        alert(
+          "No se pudo generar la URL del producto."
+        );
+        return;
+      }
 
-      alert("Producto creado correctamente.");
+      if (!product.brand_id) {
+        alert("Selecciona una marca.");
+        return;
+      }
 
-      router.push("/admin/products");
-      router.refresh();
-    } catch (error) {
-      console.error("Error creando producto:", error);
-      alert("No se pudo crear el producto.");
-    } finally {
-      setLoading(false);
+      if (!product.category_id) {
+        alert("Selecciona una categoría.");
+        return;
+      }
+
+      if (
+        product.price === "" ||
+        Number(product.price) <= 0
+      ) {
+        alert("Ingresa un precio válido.");
+        return;
+      }
+
+      if (
+        product.stock === "" ||
+        Number(product.stock) < 0
+      ) {
+        alert("Ingresa un stock válido.");
+        return;
+      }
+
+      if (product.sizes.length === 0) {
+        alert("Selecciona al menos una talla.");
+        return;
+      }
+
+      if (!imageFile && !product.image.trim()) {
+        alert("Selecciona una imagen para el producto.");
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        let imageUrl = product.image.trim();
+
+        // ================================
+        // SUBIR IMAGEN
+        // ================================
+
+        if (imageFile) {
+          try {
+            imageUrl = await uploadProductImage(
+              imageFile
+            );
+          } catch (error) {
+            console.error(
+              "Error subiendo imagen:",
+              error
+            );
+
+            const message =
+              error instanceof Error
+                ? error.message
+                : "Error desconocido al subir la imagen.";
+
+            alert(
+              `No se pudo subir la imagen.\n\n${message}`
+            );
+
+            return;
+          }
+        }
+
+        // ================================
+        // CREAR PRODUCTO
+        // ================================
+
+        try {
+          await createProduct({
+            name: product.name.trim(),
+            slug: product.slug.trim(),
+            description: product.description.trim(),
+            image: imageUrl,
+            price: Number(product.price),
+            original_price: null,
+            stock: Number(product.stock),
+            featured: product.featured,
+            is_new: false,
+            brand_id: Number(product.brand_id),
+            category_id: Number(product.category_id),
+            sizes: product.sizes,
+          });
+        } catch (error) {
+          console.error(
+            "Error insertando producto:",
+            error
+          );
+
+          const message =
+            error instanceof Error
+              ? error.message
+              : "Error desconocido al guardar el producto.";
+
+          alert(
+            `No se pudo guardar el producto.\n\n${message}`
+          );
+
+          return;
+        }
+
+        alert("Producto creado correctamente.");
+
+        router.push("/admin/products");
+        router.refresh();
+      } finally {
+        setLoading(false);
+      }
     }
-  }
 
   if (loadingOptions) {
     return (
