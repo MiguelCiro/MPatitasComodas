@@ -11,17 +11,15 @@ import {
 export default function Footer() {
   return (
     <footer className="mt-24 bg-black text-white">
-
-      {/* Parte superior */}
+      {/* ========================================= */}
+      {/* PARTE SUPERIOR */}
+      {/* ========================================= */}
 
       <div className="mx-auto max-w-7xl px-6 py-16">
-
         <div className="grid gap-14 lg:grid-cols-[1.4fr_2fr]">
-
-          {/* Logo */}
+          {/* LOGO */}
 
           <div>
-
             <h2 className="text-4xl font-black tracking-tight">
               KICKDISTRICT
             </h2>
@@ -31,26 +29,24 @@ export default function Footer() {
             </p>
 
             <p className="mt-8 max-w-md leading-8 text-gray-400">
-              Sneakers premium seleccionados para quienes viven la cultura urbana.
-              Calidad, autenticidad y los modelos más exclusivos.
+              Sneakers premium seleccionados para quienes viven la cultura
+              urbana. Calidad, autenticidad y los modelos más exclusivos.
             </p>
-
           </div>
 
-          {/* Newsletter */}
+          {/* NEWSLETTER */}
 
-          <div className="rounded-3xl border border-gray-800 bg-zinc-900 p-8">
-
-            <h3 className="text-3xl font-black">
+          <div className="rounded-3xl border border-gray-800 bg-zinc-900 p-6 sm:p-8">
+            <h3 className="text-2xl font-black sm:text-3xl">
               Únete a KickDistrict
             </h3>
 
-            <p className="mt-3 text-gray-400">
-              Recibe lanzamientos exclusivos, descuentos y novedades antes que todos.
+            <p className="mt-3 leading-7 text-gray-400">
+              Recibe lanzamientos exclusivos, descuentos y novedades antes
+              que todos.
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-
               <input
                 type="email"
                 placeholder="Tu correo electrónico"
@@ -60,199 +56,245 @@ export default function Footer() {
               <button className="h-14 rounded-xl bg-red-600 px-8 font-bold transition hover:bg-red-700">
                 Suscribirme
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
 
-      {/* Línea */}
+      {/* ========================================= */}
+      {/* LÍNEA SUPERIOR */}
+      {/* ========================================= */}
 
       <div className="border-t border-gray-800" />
 
-      {/* Links */}
+      {/* ========================================= */}
+      {/* LINKS */}
+      {/* ========================================= */}
 
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-6 py-12 sm:py-14">
+        {/* 
+          MÓVIL:
+          Tienda | Ayuda
+          ----------------
+          Contacto | Síguenos
 
-        {/* Tienda */}
+          DESKTOP:
+          Tienda | Ayuda | Contacto | Síguenos
+        */}
 
-        <div>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 lg:grid-cols-4 lg:gap-12">
+          {/* ========================================= */}
+          {/* TIENDA */}
+          {/* ========================================= */}
 
-          <h3 className="mb-5 text-xl font-bold">
-            Tienda
-          </h3>
+          <div>
+            <h3 className="mb-5 text-xl font-bold">
+              Tienda
+            </h3>
 
-          <div className="space-y-3 text-gray-400">
+            <div className="space-y-3 text-gray-400">
+              <Link
+                href="/nike"
+                className="block transition hover:text-red-500"
+              >
+                Nike
+              </Link>
 
-            <Link href="/nike" className="block transition hover:text-red-500">
-              Nike
-            </Link>
+              <Link
+                href="/jordan"
+                className="block transition hover:text-red-500"
+              >
+                Jordan
+              </Link>
 
-            <Link href="/jordan" className="block transition hover:text-red-500">
-              Jordan
-            </Link>
+              <Link
+                href="/adidas"
+                className="block transition hover:text-red-500"
+              >
+                Adidas
+              </Link>
 
-            <Link href="/adidas" className="block transition hover:text-red-500">
-              Adidas
-            </Link>
+              <Link
+                href="/new-balance"
+                className="block transition hover:text-red-500"
+              >
+                New Balance
+              </Link>
 
-            <Link href="/new-balance" className="block transition hover:text-red-500">
-              New Balance
-            </Link>
-
-            <Link href="/puma" className="block transition hover:text-red-500">
-              Puma
-            </Link>
-
-          </div>
-
-        </div>
-
-        {/* Ayuda */}
-
-        <div>
-
-          <h3 className="mb-5 text-xl font-bold">
-            Ayuda
-          </h3>
-
-          <div className="space-y-3 text-gray-400">
-
-            <Link href="/" className="block transition hover:text-red-500">
-              Preguntas frecuentes
-            </Link>
-
-            <Link href="/" className="block transition hover:text-red-500">
-              Envíos
-            </Link>
-
-            <Link href="/" className="block transition hover:text-red-500">
-              Cambios y devoluciones
-            </Link>
-
-            <Link href="/" className="block transition hover:text-red-500">
-              Garantía
-            </Link>
-
-          </div>
-
-        </div>
-
-        {/* Contacto */}
-
-        <div>
-
-          <h3 className="mb-5 text-xl font-bold">
-            Contacto
-          </h3>
-
-          <div className="space-y-5 text-gray-400">
-
-            <div className="flex items-center gap-3">
-
-              <MapPin size={18} />
-
-              Medellín, Colombia
-
+              <Link
+                href="/puma"
+                className="block transition hover:text-red-500"
+              >
+                Puma
+              </Link>
             </div>
-
-            <div className="flex items-center gap-3">
-
-              <Phone size={18} />
-
-              +57 300 000 0000
-
-            </div>
-
-            <div className="flex items-center gap-3">
-
-              <Mail size={18} />
-
-              contacto@kickdistrict.com
-
-            </div>
-
           </div>
 
-        </div>
+          {/* ========================================= */}
+          {/* AYUDA */}
+          {/* ========================================= */}
 
-        {/* Redes */}
+          <div>
+            <h3 className="mb-5 text-xl font-bold">
+              Ayuda
+            </h3>
 
-        <div>
+            <div className="space-y-3 text-gray-400">
+              <Link
+                href="/"
+                className="block transition hover:text-red-500"
+              >
+                Preguntas frecuentes
+              </Link>
 
-          <h3 className="mb-5 text-xl font-bold">
-            Síguenos
-          </h3>
+              <Link
+                href="/"
+                className="block transition hover:text-red-500"
+              >
+                Envíos
+              </Link>
 
-          <div className="flex gap-4">
+              <Link
+                href="/"
+                className="block transition hover:text-red-500"
+              >
+                Cambios y devoluciones
+              </Link>
 
-            <a
-              href="#"
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
-            >
-              <FaInstagram size={20} />
-            </a>
-
-            <a
-              href="#"
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
-            >
-              <FaFacebookF size={18} />
-            </a>
-
-            <a
-              href="#"
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
-            >
-              <FaTiktok size={18} />
-            </a>
-
-            <a
-              href="#"
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
-            >
-              <FaWhatsapp size={20} />
-            </a>
-
+              <Link
+                href="/"
+                className="block transition hover:text-red-500"
+              >
+                Garantía
+              </Link>
+            </div>
           </div>
 
-        </div>
+          {/* ========================================= */}
+          {/* CONTACTO */}
+          {/* ========================================= */}
 
+          <div className="border-t border-gray-800 pt-10 lg:border-t-0 lg:pt-0">
+            <h3 className="mb-5 text-xl font-bold">
+              Contacto
+            </h3>
+
+            <div className="space-y-5 text-gray-400">
+              <div className="flex items-start gap-3">
+                <MapPin
+                  size={18}
+                  className="mt-1 shrink-0"
+                />
+
+                <span>
+                  Medellín, Colombia
+                </span>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Phone
+                  size={18}
+                  className="mt-1 shrink-0"
+                />
+
+                <span>
+                  +57 300 000 0000
+                </span>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Mail
+                  size={18}
+                  className="mt-1 shrink-0"
+                />
+
+                <span className="break-all">
+                  contacto@kickdistrict.com
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* ========================================= */}
+          {/* REDES SOCIALES */}
+          {/* ========================================= */}
+
+          <div className="border-t border-gray-800 pt-10 lg:border-t-0 lg:pt-0">
+            <h3 className="mb-5 text-xl font-bold">
+              Síguenos
+            </h3>
+
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
+              >
+                <FaInstagram size={19} />
+              </a>
+
+              <a
+                href="#"
+                aria-label="Facebook"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
+              >
+                <FaFacebookF size={17} />
+              </a>
+
+              <a
+                href="#"
+                aria-label="TikTok"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
+              >
+                <FaTiktok size={18} />
+              </a>
+
+              <a
+                href="#"
+                aria-label="WhatsApp"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
+              >
+                <FaWhatsapp size={19} />
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Parte inferior */}
+      {/* ========================================= */}
+      {/* PARTE INFERIOR */}
+      {/* ========================================= */}
 
       <div className="border-t border-gray-800">
-
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-6 py-7 text-sm text-gray-500 md:flex-row">
-
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-6 py-7 text-center text-sm text-gray-500 md:flex-row md:text-left">
           <p>
             © 2026 KickDistrict. Todos los derechos reservados.
           </p>
 
-          <div className="flex gap-8">
-
-            <Link href="/" className="hover:text-red-500">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <Link
+              href="/"
+              className="transition hover:text-red-500"
+            >
               Privacidad
             </Link>
 
-            <Link href="/" className="hover:text-red-500">
+            <Link
+              href="/"
+              className="transition hover:text-red-500"
+            >
               Términos
             </Link>
 
-            <Link href="/" className="hover:text-red-500">
+            <Link
+              href="/"
+              className="transition hover:text-red-500"
+            >
               Cookies
             </Link>
-
           </div>
-
         </div>
-
       </div>
-
     </footer>
   );
 }

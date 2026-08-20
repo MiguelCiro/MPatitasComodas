@@ -1,24 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import Image from "next/image";
-
-import {
-  Heart,
-} from "lucide-react";
+import { Heart } from "lucide-react";
 
 import { Product } from "@/types/product";
 
 import ProductDrawer from "@/components/ProductDrawer/ProductDrawer";
 
-import { useContext } from "react";
-
 import { FavoritesContext } from "@/context/FavoritesContext";
 
-export default function ProductCard(
-  product: Product
-) {
+export default function ProductCard(product: Product) {
   const [open, setOpen] = useState(false);
 
   const {
@@ -39,21 +32,24 @@ export default function ProductCard(
   return (
     <>
       <div className="group overflow-hidden rounded-3xl border border-gray-200 bg-white transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
+        {/* ================================= */}
         {/* IMAGEN */}
+        {/* ================================= */}
+
         <div
           onClick={() => setOpen(true)}
-          className="relative h-72 cursor-pointer bg-gray-100"
+          className="relative h-60 cursor-pointer bg-gray-100 sm:h-72"
         >
           <Image
             src={product.image}
             alt={product.name}
             fill
-            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 25vw"
-            className="object-contain p-8 transition duration-500 group-hover:scale-110"
+            sizes="(max-width: 767px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            className="object-contain p-5 transition duration-500 group-hover:scale-110 sm:p-8"
           />
 
           {/* FAVORITO */}
+
           <button
             type="button"
             onClick={handleFavorite}
@@ -62,10 +58,10 @@ export default function ProductCard(
                 ? "Quitar de favoritos"
                 : "Agregar a favoritos"
             }
-            className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-md transition hover:scale-110"
+            className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition hover:scale-110 sm:right-4 sm:top-4 sm:h-11 sm:w-11"
           >
             <Heart
-              size={21}
+              size={20}
               className={
                 favorite
                   ? "fill-red-600 text-red-600"
@@ -75,42 +71,43 @@ export default function ProductCard(
           </button>
         </div>
 
+        {/* ================================= */}
         {/* INFORMACIÓN */}
-        <div className="p-6">
+        {/* ================================= */}
 
-          <p className="text-sm uppercase tracking-wider text-red-600">
+        <div className="p-5 sm:p-6">
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-red-600 sm:text-sm sm:tracking-wider">
             {product.brand.name}
           </p>
 
-          <h3 className="mt-2 text-xl font-bold">
+          <h3 className="mt-2 text-xl font-bold leading-tight text-gray-900 sm:text-xl">
             {product.name}
           </h3>
 
-          <p className="mt-4 text-2xl font-black">
-            $
-            {product.price.toLocaleString(
-              "es-CO"
-            )}
+          <p className="mt-3 text-2xl font-black text-gray-900 sm:mt-4">
+            ${product.price.toLocaleString("es-CO")}
           </p>
-
         </div>
 
+        {/* ================================= */}
         {/* BOTÓN */}
-        <div className="px-6 pb-6">
+        {/* ================================= */}
 
+        <div className="px-5 pb-5 sm:px-6 sm:pb-6">
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="w-full rounded-xl bg-black py-4 font-semibold text-white transition hover:bg-red-600"
+            className="w-full rounded-xl bg-black py-3.5 font-semibold text-white transition hover:bg-red-600 sm:py-4"
           >
             Comprar
           </button>
-
         </div>
-
       </div>
 
+      {/* ================================= */}
       {/* PRODUCT DRAWER */}
+      {/* ================================= */}
+
       <ProductDrawer
         product={product}
         open={open}
