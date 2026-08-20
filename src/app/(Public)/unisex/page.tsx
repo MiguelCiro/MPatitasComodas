@@ -8,7 +8,7 @@ export default async function UnisexPage() {
   const products: Product[] = await getProducts();
 
   const unisexProducts = products.filter(
-    (product) => product.category === "Unisex"
+    (product) => product.category.name === "Unisex"
   );
 
   return (
