@@ -7,6 +7,7 @@ import {
   ShoppingBag,
   X,
   ArrowUpRight,
+  ChevronDown,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -28,6 +29,9 @@ export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
 
+  const [openMobileDropdown, setOpenMobileDropdown] =
+    useState<"hombre" | "mujer" | null>(null);
+
   useEffect(() => {
     if (!openMenu) return;
 
@@ -44,6 +48,7 @@ export default function Header() {
 
   function closeMobileMenu() {
     setOpenMenu(false);
+    setOpenMobileDropdown(null);
   }
 
   return (
@@ -65,11 +70,11 @@ export default function Header() {
           >
             <div>
               <h1 className="text-2xl font-black tracking-tight transition group-hover:text-red-600 lg:text-3xl">
-                KICKDISTRICT
+                MPATITAS CÓMODAS
               </h1>
 
               <p className="text-[9px] uppercase tracking-[3px] text-gray-500 sm:text-[10px] sm:tracking-[4px] lg:text-xs lg:tracking-[5px]">
-                Every Step Defines You
+                Comodidad para cada paso
               </p>
             </div>
           </Link>
@@ -84,28 +89,12 @@ export default function Header() {
               title="Hombre"
               items={[
                 {
-                  label: "Nike",
-                  href: "/nike",
+                  label: "Cortas",
+                  href: "/hombre/cortas",
                 },
                 {
-                  label: "Jordan",
-                  href: "/jordan",
-                },
-                {
-                  label: "Adidas",
-                  href: "/adidas",
-                },
-                {
-                  label: "New Balance",
-                  href: "/new-balance",
-                },
-                {
-                  label: "Puma",
-                  href: "/puma",
-                },
-                {
-                  label: "Converse",
-                  href: "/converse",
+                  label: "Largas",
+                  href: "/hombre/largas",
                 },
               ]}
             />
@@ -114,28 +103,45 @@ export default function Header() {
               title="Mujer"
               items={[
                 {
-                  label: "Nike",
-                  href: "/nike",
+                  label: "Cortas",
+                  href: "/mujer/cortas",
                 },
                 {
-                  label: "Jordan",
-                  href: "/jordan",
+                  label: "Largas",
+                  href: "/mujer/largas",
+                },
+              ]}
+            />
+
+            <Link
+              href="/ninos"
+              className="font-semibold transition hover:text-red-600"
+            >
+              Niños
+            </Link>
+
+            <Dropdown
+              title="Categorias"
+              items={[
+                {
+                  label: "Antideslizantes",
+                  href: "/antideslizantes",
                 },
                 {
-                  label: "Adidas",
-                  href: "/adidas",
+                  label: "Personajes",
+                  href: "/personajes",
                 },
                 {
-                  label: "New Balance",
-                  href: "/new-balance",
+                  label: "Compresión",
+                  href: "/compresion",
                 },
                 {
-                  label: "Puma",
-                  href: "/puma",
+                  label: "Ovejeras",
+                  href: "/ovejeras",
                 },
                 {
-                  label: "Converse",
-                  href: "/converse",
+                  label: "Boleras",
+                  href: "/boleras",
                 },
               ]}
             />
@@ -170,7 +176,10 @@ export default function Header() {
               className="flex h-11 w-11 items-center justify-center rounded-xl transition hover:bg-gray-100 lg:hidden"
               aria-label="Abrir menú"
             >
-              <Menu size={27} strokeWidth={2.2} />
+              <Menu
+                size={27}
+                strokeWidth={2.2}
+              />
             </button>
 
             {/* BUSCADOR */}
@@ -221,6 +230,7 @@ export default function Header() {
             </button>
 
           </div>
+
         </div>
       </header>
 
@@ -238,7 +248,7 @@ export default function Header() {
       />
 
       {/* ====================================== */}
-      {/* MENÚ MÓVIL PREMIUM */}
+      {/* MENÚ MÓVIL */}
       {/* ====================================== */}
 
       <aside
@@ -258,11 +268,11 @@ export default function Header() {
 
           <div>
             <p className="text-2xl font-black tracking-tight">
-              KICKDISTRICT
+              MPATITAS CÓMODAS
             </p>
 
             <p className="mt-1 text-[9px] uppercase tracking-[4px] text-white/50">
-              Every Step Defines You
+              Comodidad para cada paso
             </p>
           </div>
 
@@ -282,6 +292,8 @@ export default function Header() {
         {/* ============================= */}
 
         <nav className="px-6 py-8">
+
+          {/* INICIO */}
 
           <Link
             href="/"
@@ -306,54 +318,148 @@ export default function Header() {
             />
           </Link>
 
+          {/* ================================= */}
+          {/* HOMBRE - DROPDOWN MÓVIL */}
+          {/* ================================= */}
+
+          <div className="border-b border-white/10">
+
+            <button
+              type="button"
+              onClick={() =>
+                setOpenMobileDropdown((current) =>
+                  current === "hombre"
+                    ? null
+                    : "hombre"
+                )
+              }
+              className="flex w-full items-center justify-between py-5 text-left"
+              aria-expanded={
+                openMobileDropdown === "hombre"
+              }
+            >
+              <div className="flex items-center gap-4">
+
+                <span className="text-xs font-bold tracking-[2px] text-red-500">
+                  02
+                </span>
+
+                <span className="text-2xl font-black">
+                  Hombre
+                </span>
+
+              </div>
+
+              <ChevronDown
+                size={22}
+                className={`text-white/40 transition-transform duration-300 ${
+                  openMobileDropdown === "hombre"
+                    ? "rotate-180 text-red-500"
+                    : ""
+                }`}
+              />
+
+            </button>
+
+            {openMobileDropdown === "hombre" && (
+
+              <div className="grid grid-cols-2 gap-3 pb-5 pl-10">
+
+                <Link
+                  href="/hombre/cortas"
+                  onClick={closeMobileMenu}
+                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center font-semibold text-white transition hover:border-red-500 hover:bg-red-600"
+                >
+                  Cortas
+                </Link>
+
+                <Link
+                  href="/hombre/largas"
+                  onClick={closeMobileMenu}
+                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center font-semibold text-white transition hover:border-red-500 hover:bg-red-600"
+                >
+                  Largas
+                </Link>
+
+              </div>
+
+            )}
+
+          </div>
+
+          {/* ================================= */}
+          {/* MUJER - DROPDOWN MÓVIL */}
+          {/* ================================= */}
+
+          <div className="border-b border-white/10">
+
+            <button
+              type="button"
+              onClick={() =>
+                setOpenMobileDropdown((current) =>
+                  current === "mujer"
+                    ? null
+                    : "mujer"
+                )
+              }
+              className="flex w-full items-center justify-between py-5 text-left"
+              aria-expanded={
+                openMobileDropdown === "mujer"
+              }
+            >
+              <div className="flex items-center gap-4">
+
+                <span className="text-xs font-bold tracking-[2px] text-red-500">
+                  03
+                </span>
+
+                <span className="text-2xl font-black">
+                  Mujer
+                </span>
+
+              </div>
+
+              <ChevronDown
+                size={22}
+                className={`text-white/40 transition-transform duration-300 ${
+                  openMobileDropdown === "mujer"
+                    ? "rotate-180 text-red-500"
+                    : ""
+                }`}
+              />
+
+            </button>
+
+            {openMobileDropdown === "mujer" && (
+
+              <div className="grid grid-cols-2 gap-3 pb-5 pl-10">
+
+                <Link
+                  href="/mujer/cortas"
+                  onClick={closeMobileMenu}
+                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center font-semibold text-white transition hover:border-red-500 hover:bg-red-600"
+                >
+                  Cortas
+                </Link>
+
+                <Link
+                  href="/mujer/largas"
+                  onClick={closeMobileMenu}
+                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center font-semibold text-white transition hover:border-red-500 hover:bg-red-600"
+                >
+                  Largas
+                </Link>
+
+              </div>
+
+            )}
+
+          </div>
+
+          {/* NIÑOS */}
+
           <Link
-            href="/hombre"
-            onClick={closeMobileMenu}
-            className="group flex items-center justify-between border-b border-white/10 py-5"
-          >
-            <div className="flex items-center gap-4">
-
-              <span className="text-xs font-bold tracking-[2px] text-red-500">
-                02
-              </span>
-
-              <span className="text-2xl font-black">
-                Hombre
-              </span>
-
-            </div>
-
-            <ArrowUpRight
-              size={21}
-              className="text-white/40 transition group-hover:text-red-500"
-            />
-          </Link>
-
-          <Link
-            href="/mujer"
-            onClick={closeMobileMenu}
-            className="group flex items-center justify-between border-b border-white/10 py-5"
-          >
-            <div className="flex items-center gap-4">
-
-              <span className="text-xs font-bold tracking-[2px] text-red-500">
-                03
-              </span>
-
-              <span className="text-2xl font-black">
-                Mujer
-              </span>
-
-            </div>
-
-            <ArrowUpRight
-              size={21}
-              className="text-white/40 transition group-hover:text-red-500"
-            />
-          </Link>
-
-          <Link
-            href="/unisex"
+            href="/ninos"
             onClick={closeMobileMenu}
             className="group flex items-center justify-between border-b border-white/10 py-5"
           >
@@ -364,7 +470,7 @@ export default function Header() {
               </span>
 
               <span className="text-2xl font-black">
-                Unisex
+                Niños
               </span>
 
             </div>
@@ -378,63 +484,55 @@ export default function Header() {
         </nav>
 
         {/* ============================= */}
-        {/* MARCAS */}
+        {/* SECCIONES */}
         {/* ============================= */}
 
         <section className="border-t border-white/10 px-6 py-8">
 
           <p className="mb-5 text-xs font-bold uppercase tracking-[3px] text-white/40">
-            Explora por marca
+            Explora por sección
           </p>
 
           <div className="grid grid-cols-2 gap-3">
 
             <Link
-              href="/nike"
+              href="/antideslizantes"
               onClick={closeMobileMenu}
               className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 font-semibold transition hover:border-red-500 hover:bg-red-600"
             >
-              Nike
+              Antideslizantes
             </Link>
 
             <Link
-              href="/jordan"
+              href="/boleras"
               onClick={closeMobileMenu}
               className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 font-semibold transition hover:border-red-500 hover:bg-red-600"
             >
-              Jordan
+              Boleras
             </Link>
 
             <Link
-              href="/adidas"
+              href="/compresion"
               onClick={closeMobileMenu}
               className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 font-semibold transition hover:border-red-500 hover:bg-red-600"
             >
-              Adidas
+              Compresión
             </Link>
 
             <Link
-              href="/new-balance"
+              href="/ovejeras"
               onClick={closeMobileMenu}
               className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 font-semibold transition hover:border-red-500 hover:bg-red-600"
             >
-              New Balance
+              Ovejeras
             </Link>
 
             <Link
-              href="/puma"
+              href="/personajes"
               onClick={closeMobileMenu}
               className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 font-semibold transition hover:border-red-500 hover:bg-red-600"
             >
-              Puma
-            </Link>
-
-            <Link
-              href="/converse"
-              onClick={closeMobileMenu}
-              className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 font-semibold transition hover:border-red-500 hover:bg-red-600"
-            >
-              Converse
+              Personajes
             </Link>
 
           </div>
@@ -494,7 +592,7 @@ export default function Header() {
           </Link>
 
           <p className="mt-6 text-[10px] uppercase tracking-[3px] text-white/30">
-            KickDistrict · Medellín, Colombia
+            MPatitas Cómodas · Medellín, Colombia
           </p>
 
         </section>

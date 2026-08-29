@@ -74,7 +74,7 @@ export default function FavoritesPage() {
         <div>
 
           <p className="text-sm font-bold uppercase tracking-widest text-red-600">
-            KickDistrict
+            MPATITAS COMODAS
           </p>
 
           <h1 className="mt-2 text-5xl font-black">
@@ -113,7 +113,7 @@ export default function FavoritesPage() {
 
             {/* IMAGEN */}
             <Link
-              href={`/producto/${product.slug}`}
+              href={`/product/${product.slug}`}
               className="relative block h-72 bg-gray-100"
             >
 
@@ -131,7 +131,7 @@ export default function FavoritesPage() {
             <div className="p-6">
 
               <p className="text-sm uppercase tracking-wider text-red-600">
-                {product.brand.name}
+                {product.name}
               </p>
 
               <h2 className="mt-2 text-xl font-bold">
@@ -163,7 +163,7 @@ export default function FavoritesPage() {
                 </button>
 
                 <Link
-                  href={`/producto/${product.slug}`}
+                  href={`/product/${product.slug}`}
                   className="flex flex-1 items-center justify-center rounded-xl bg-black font-semibold text-white transition hover:bg-red-600"
                 >
                   Ver producto

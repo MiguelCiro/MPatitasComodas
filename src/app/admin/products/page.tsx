@@ -184,7 +184,7 @@ export default function ProductsPage() {
                         </td>
 
                         <td className="p-5">
-                          {product.brand?.name ??
+                          {product.name ??
                             "Sin marca"}
                         </td>
 
@@ -272,7 +272,7 @@ export default function ProductsPage() {
                             <span className="font-semibold text-gray-700">
                               Marca:
                             </span>{" "}
-                            {product.brand?.name ??
+                            {product.name ??
                               "Sin marca"}
                           </p>
 

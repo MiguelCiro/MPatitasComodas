@@ -1,38 +1,27 @@
 export const slides = [
   {
     id: 1,
-    brand: "Jordan",
-    title: "Air Jordan Collection",
-    subtitle: "Descubre la nueva generación.",
-    image: "/images/hero/hero2.jpg",
-    href: "/jordan",
-    button: "Comprar Jordan",
+
+    brand: "OFERTA ESPECIAL",
+
+    title: "1 PERNERA + 1 PAR ANTIDESLIZANTE POR SOLO $22.000",
+
+    subtitle:
+      "Obtén dos estilos cómodos para cada paso.",
+
+    image: "/images/hero/promocion01.png",
+
+    href: "/ofertas",
+
+    button: "Comprar Oferta",
   },
   {
     id: 2,
-    brand: "Nike",
-    title: "Nike Running",
-    subtitle: "Comodidad para cada paso.",
-    image: "/images/hero/hero1.jpg",
-    href: "/nike",
-    button: "Comprar Nike",
-  },
-  {
-    id: 3,
-    brand: "Adidas",
-    title: "Adidas Originals",
-    subtitle: "El clásico nunca pasa de moda.",
-    image: "/images/hero/hero3.jpg",
-    href: "/adidas",
-    button: "Comprar Adidas",
-  },
-  {
-    id: 4,
-    brand: "New Balance",
-    title: "New Balance",
-    subtitle: "Diseño premium y máximo confort.",
-    image: "/images/hero/hero4.jpg",
-    href: "/new-balance",
-    button: "Comprar New Balance",
-  },
+    brand: "OFERTA ESPECIAL",
+    title: "1 PERNERA + 1 PAR ANTIDESLIZANTE POR SOLO $22.000",
+    subtitle: "Obtén dos estilos cómodos para cada paso.",
+    image: "/images/hero/promo02.png",
+    href: "/ofertas",
+    button: "Comprar Oferta",
+  }
 ];

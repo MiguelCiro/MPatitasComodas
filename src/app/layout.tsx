@@ -23,23 +23,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KickDistrict | Premium Sneakers",
+  title: "MPatitas Cómodas | Medias con estilo",
 
   description:
-    "Descubre los sneakers más exclusivos de Nike, Jordan, Adidas, New Balance y mucho más.",
+    "Descubre medias y calcetines cómodos, originales y llenos de estilo para cada paso.",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body>
+      <body className="min-h-screen">
         <CartProvider>
           <FavoritesProvider>
             {children}

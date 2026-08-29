@@ -76,9 +76,6 @@ export default function ProductCard(product: Product) {
         {/* ================================= */}
 
         <div className="p-5 sm:p-6">
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-red-600 sm:text-sm sm:tracking-wider">
-            {product.brand.name}
-          </p>
 
           <h3 className="mt-2 text-xl font-bold leading-tight text-gray-900 sm:text-xl">
             {product.name}

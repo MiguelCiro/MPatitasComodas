@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
 
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-black">
-            KickDistrict
+            Mpatitas Comodas
           </h1>
 
           <p className="mt-2 text-gray-500">

@@ -1,39 +1,27 @@
 type Props = {
-  brand: string;
   name: string;
   description: string;
   price: number;
 };
 
 export default function ProductInfo({
-  brand,
   name,
   description,
   price,
 }: Props) {
-
   return (
-
     <div>
-
-      <p className="text-red-600 font-semibold uppercase">
-        {brand}
-      </p>
-
-      <h1 className="mt-3 text-5xl font-black">
+      <h1 className="text-3xl font-bold text-gray-900">
         {name}
       </h1>
 
-      <p className="mt-6 text-gray-600 leading-8">
+      <p className="mt-4 text-gray-600">
         {description}
       </p>
 
-      <p className="mt-10 text-4xl font-black">
+      <p className="mt-6 text-2xl font-bold text-gray-900">
         ${price.toLocaleString("es-CO")}
       </p>
-
     </div>
-
   );
-
 }

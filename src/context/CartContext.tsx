@@ -3,7 +3,7 @@ import { createContext } from "react";
 import { Product } from "@/types/product";
 
 export type CartItem = Product & {
-  size: number;
+  color: string;
   quantity: number;
 };
 
@@ -12,23 +12,23 @@ type CartContextType = {
 
   addToCart: (
     product: Product,
-    size: number,
+    color: string,
     quantity?: number
   ) => void;
 
   removeFromCart: (
     id: number,
-    size: number
+    color: string
   ) => void;
 
   increaseQuantity: (
     id: number,
-    size: number
+    color: string
   ) => void;
 
   decreaseQuantity: (
     id: number,
-    size: number
+    color: string
   ) => void;
 
   clearCart: () => void;
@@ -44,26 +44,27 @@ type CartContextType = {
   closeCart: () => void;
 };
 
-export const CartContext = createContext<CartContextType>({
-  cart: [],
+export const CartContext =
+  createContext<CartContextType>({
+    cart: [],
 
-  addToCart: () => {},
+    addToCart: () => {},
 
-  removeFromCart: () => {},
+    removeFromCart: () => {},
 
-  increaseQuantity: () => {},
+    increaseQuantity: () => {},
 
-  decreaseQuantity: () => {},
+    decreaseQuantity: () => {},
 
-  clearCart: () => {},
+    clearCart: () => {},
 
-  totalItems: 0,
+    totalItems: 0,
 
-  subtotal: 0,
+    subtotal: 0,
 
-  isCartOpen: false,
+    isCartOpen: false,
 
-  openCart: () => {},
+    openCart: () => {},
 
-  closeCart: () => {},
-});
+    closeCart: () => {},
+  });

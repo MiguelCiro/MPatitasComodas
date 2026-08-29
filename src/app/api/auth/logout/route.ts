@@ -1,7 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest
+) {
   const response = NextResponse.json({
     success: true,
   });
@@ -16,13 +18,15 @@ export async function POST(request: NextRequest) {
         },
 
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            response.cookies.set({
-              name,
-              value,
-              ...options,
-            });
-          });
+          cookiesToSet.forEach(
+            ({ name, value, options }) => {
+              response.cookies.set({
+                name,
+                value,
+                ...options,
+              });
+            }
+          );
         },
       },
     }

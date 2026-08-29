@@ -1,3 +1,20 @@
+export type ProductCategory =
+  | "Largas Hombre"
+  | "Largas Mujer"
+  | "Cortas Hombre"
+  | "Cortas Mujer"
+  | "Antideslizantes"
+  | "Ovejeras"
+  | "Compresión"
+  | "Personajes"
+  | "Niños"
+  | "Boleras";
+
+export type ProductColorImage = {
+  color: string;
+  image: string;
+};
+
 export type Product = {
   id: number;
 
@@ -15,24 +32,18 @@ export type Product = {
 
   image: string;
 
+  color_images: ProductColorImage[];
+
   featured: boolean;
 
   is_new: boolean;
 
-  sizes: number[];
-
-  brand_id: number;
+  colors: string[];
 
   category_id: number;
 
-  brand: {
-    id: number;
-    name: string;
-    logo: string;
-  };
-
   category: {
     id: number;
-    name: "Hombre" | "Mujer" | "Unisex";
+    name: ProductCategory;
   };
 };

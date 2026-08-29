@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
 import { Product } from "@/types/product";
@@ -18,23 +19,40 @@ export default function ProductDrawer({
   open,
   onClose,
 }: Props) {
+  const [selectedImage, setSelectedImage] =
+    useState<string>("");
+
+  // ==========================================
+  // Cuando cambia el producto
+  // volvemos a su imagen principal
+  // ==========================================
+
+  useEffect(() => {
+    if (product) {
+      setSelectedImage(product.image);
+    }
+  }, [product]);
 
   if (!product) return null;
 
   return (
     <>
-      {/* Fondo oscuro */}
+      {/* ====================================== */}
+      {/* FONDO OSCURO */}
+      {/* ====================================== */}
 
       <div
         onClick={onClose}
         className={`fixed inset-0 z-40 bg-black/60 transition-all duration-300 ${
           open
-            ? "opacity-100 visible"
-            : "opacity-0 invisible"
+            ? "visible opacity-100"
+            : "invisible opacity-0"
         }`}
       />
 
-      {/* Drawer */}
+      {/* ====================================== */}
+      {/* DRAWER */}
+      {/* ====================================== */}
 
       <aside
         className={`fixed inset-0 z-50 bg-white transition-transform duration-500 ${
@@ -43,33 +61,48 @@ export default function ProductDrawer({
             : "translate-x-full"
         }`}
       >
-
-        {/* Botón cerrar */}
+        {/* ==================================== */}
+        {/* CERRAR */}
+        {/* ==================================== */}
 
         <button
+          type="button"
           onClick={onClose}
           className="absolute right-8 top-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg transition hover:scale-110"
+          aria-label="Cerrar producto"
         >
           <X size={28} />
         </button>
 
-        <div className="grid h-screen lg:grid-cols-2 grid-cols-1 overflow-y-auto">
-          {/* Imagen */}
+        {/* ==================================== */}
+        {/* CONTENIDO */}
+        {/* ==================================== */}
+
+        <div className="grid h-screen grid-cols-1 overflow-y-auto lg:grid-cols-2">
+
+          {/* ================================== */}
+          {/* GALERÍA */}
+          {/* ================================== */}
 
           <ProductGallery
-            image={product.image}
+            image={
+              selectedImage ||
+              product.image
+            }
             name={product.name}
           />
 
-          {/* Información */}
+          {/* ================================== */}
+          {/* INFORMACIÓN */}
+          {/* ================================== */}
 
           <ProductDetail
             product={product}
             onClose={onClose}
+            onImageChange={setSelectedImage}
           />
 
         </div>
-
       </aside>
     </>
   );

@@ -1,18 +1,21 @@
 import { supabase } from "@/lib/supabase";
-import { Product } from "@/types/product";
+
+import {
+  Product,
+  ProductColorImage,
+} from "@/types/product";
 
 const PRODUCT_SELECT = `
   *,
-  brand:brands(
-    id,
-    name,
-    logo
-  ),
   category:categories(
     id,
     name
   )
 `;
+
+// ======================================
+// Tipos
+// ======================================
 
 export type CreateProductInput = {
   slug: string;
@@ -22,14 +25,21 @@ export type CreateProductInput = {
   original_price?: number | null;
   stock: number;
   image: string;
+
+  color_images: ProductColorImage[];
+
   featured: boolean;
   is_new?: boolean;
-  sizes: number[];
-  brand_id: number;
+  colors: string[];
   category_id: number;
 };
 
-export type UpdateProductInput = Partial<CreateProductInput>;
+export type UpdateProductInput =
+  Partial<CreateProductInput>;
+
+// ======================================
+// Obtener todos los productos
+// ======================================
 
 export async function getProducts(): Promise<Product[]> {
   const { data, error } = await supabase
@@ -38,12 +48,32 @@ export async function getProducts(): Promise<Product[]> {
     .order("id");
 
   if (error) {
-    console.error("Error obteniendo productos:", error);
+    console.error(
+      "Error obteniendo productos:",
+      error
+    );
+
     return [];
   }
 
-  return data as Product[];
+  return (data ?? []).map((product) => ({
+    ...product,
+
+    colors: Array.isArray(product.colors)
+      ? product.colors
+      : [],
+
+    color_images:
+      product.color_images &&
+      typeof product.color_images === "object"
+        ? product.color_images
+        : {},
+  })) as Product[];
 }
+
+// ======================================
+// Productos destacados
+// ======================================
 
 export async function getFeaturedProducts(): Promise<Product[]> {
   const { data, error } = await supabase
@@ -53,17 +83,38 @@ export async function getFeaturedProducts(): Promise<Product[]> {
     .order("id");
 
   if (error) {
-    console.error("Error obteniendo productos destacados:", error);
+    console.error(
+      "Error obteniendo productos destacados:",
+      error
+    );
+
     return [];
   }
 
-  return data as Product[];
+  return (data ?? []).map((product) => ({
+    ...product,
+
+    colors: Array.isArray(product.colors)
+      ? product.colors
+      : [],
+
+    color_images:
+      product.color_images &&
+      typeof product.color_images === "object"
+        ? product.color_images
+        : {},
+  })) as Product[];
 }
+
+// ======================================
+// Buscar producto por slug
+// ======================================
 
 export async function getProductBySlug(
   slug: string
 ): Promise<Product | null> {
-  const cleanSlug = slug.trim().toLowerCase();
+  const cleanSlug =
+    slug.trim().toLowerCase();
 
   const { data, error } = await supabase
     .from("products")
@@ -84,40 +135,24 @@ export async function getProductBySlug(
     return null;
   }
 
-  return data as Product;
+  return {
+    ...data,
+
+    colors: Array.isArray(data.colors)
+      ? data.colors
+      : [],
+
+    color_images:
+      data.color_images &&
+      typeof data.color_images === "object"
+        ? data.color_images
+        : {},
+  } as Product;
 }
 
-export async function getProductsByBrand(
-  brand: string
-): Promise<Product[]> {
-  const { data, error } = await supabase
-    .from("products")
-    .select(`
-      *,
-      brand:brands!inner(
-        id,
-        name,
-        logo
-      ),
-      category:categories(
-        id,
-        name
-      )
-    `)
-    .eq("brand.name", brand)
-    .order("id");
-
-  if (error) {
-    console.error(
-      "Error obteniendo productos por marca:",
-      error
-    );
-
-    return [];
-  }
-
-  return data as Product[];
-}
+// ======================================
+// Productos por categoría
+// ======================================
 
 export async function getProductsByCategory(
   category: string
@@ -126,11 +161,6 @@ export async function getProductsByCategory(
     .from("products")
     .select(`
       *,
-      brand:brands(
-        id,
-        name,
-        logo
-      ),
       category:categories!inner(
         id,
         name
@@ -148,7 +178,19 @@ export async function getProductsByCategory(
     return [];
   }
 
-  return data as Product[];
+  return (data ?? []).map((product) => ({
+    ...product,
+
+    colors: Array.isArray(product.colors)
+      ? product.colors
+      : [],
+
+    color_images:
+      product.color_images &&
+      typeof product.color_images === "object"
+        ? product.color_images
+        : {},
+  })) as Product[];
 }
 
 // ======================================
@@ -159,18 +201,41 @@ export async function createProduct(
   product: CreateProductInput
 ): Promise<Product> {
   const payload = {
-    slug: product.slug.trim().toLowerCase(),
-    name: product.name.trim(),
-    description: product.description.trim(),
-    price: Number(product.price),
-    original_price: product.original_price ?? null,
-    stock: Number(product.stock),
-    image: product.image,
-    featured: Boolean(product.featured),
-    is_new: Boolean(product.is_new),
-    sizes: product.sizes,
-    brand_id: Number(product.brand_id),
-    category_id: Number(product.category_id),
+    slug:
+      product.slug.trim().toLowerCase(),
+
+    name:
+      product.name.trim(),
+
+    description:
+      product.description.trim(),
+
+    price:
+      Number(product.price),
+
+    original_price:
+      product.original_price ?? null,
+
+    stock:
+      Number(product.stock),
+
+    image:
+      product.image,
+
+    color_images:
+      product.color_images ?? {},
+
+    featured:
+      Boolean(product.featured),
+
+    is_new:
+      Boolean(product.is_new),
+
+    colors:
+      product.colors,
+
+    category_id:
+      Number(product.category_id),
   };
 
   const { data, error } = await supabase
@@ -187,11 +252,23 @@ export async function createProduct(
 
     throw new Error(
       error.message ||
-        "No se pudo insertar el producto en la base de datos."
+        "No se pudo insertar el producto."
     );
   }
 
-  return data as Product;
+  return {
+    ...data,
+
+    colors: Array.isArray(data.colors)
+      ? data.colors
+      : [],
+
+    color_images:
+      data.color_images &&
+      typeof data.color_images === "object"
+        ? data.color_images
+        : {},
+  } as Product;
 }
 
 // ======================================
@@ -202,9 +279,48 @@ export async function updateProduct(
   id: number,
   product: UpdateProductInput
 ): Promise<Product> {
+  const payload = {
+    ...product,
+
+    ...(product.slug !== undefined && {
+      slug:
+        product.slug.trim().toLowerCase(),
+    }),
+
+    ...(product.name !== undefined && {
+      name:
+        product.name.trim(),
+    }),
+
+    ...(product.description !== undefined && {
+      description:
+        product.description.trim(),
+    }),
+
+    ...(product.price !== undefined && {
+      price:
+        Number(product.price),
+    }),
+
+    ...(product.stock !== undefined && {
+      stock:
+        Number(product.stock),
+    }),
+
+    ...(product.category_id !== undefined && {
+      category_id:
+        Number(product.category_id),
+    }),
+
+    ...(product.color_images !== undefined && {
+      color_images:
+        product.color_images,
+    }),
+  };
+
   const { data, error } = await supabase
     .from("products")
-    .update(product)
+    .update(payload)
     .eq("id", id)
     .select(PRODUCT_SELECT)
     .single();
@@ -221,7 +337,19 @@ export async function updateProduct(
     );
   }
 
-  return data as Product;
+  return {
+    ...data,
+
+    colors: Array.isArray(data.colors)
+      ? data.colors
+      : [],
+
+    color_images:
+      data.color_images &&
+      typeof data.color_images === "object"
+        ? data.color_images
+        : {},
+  } as Product;
 }
 
 // ======================================
@@ -250,7 +378,7 @@ export async function deleteProduct(
 }
 
 // ======================================
-// Productos nuevos / lanzamientos
+// Productos nuevos
 // ======================================
 
 export async function getNewProducts(): Promise<Product[]> {
@@ -269,8 +397,24 @@ export async function getNewProducts(): Promise<Product[]> {
     return [];
   }
 
-  return data as Product[];
+  return (data ?? []).map((product) => ({
+    ...product,
+
+    colors: Array.isArray(product.colors)
+      ? product.colors
+      : [],
+
+    color_images:
+      product.color_images &&
+      typeof product.color_images === "object"
+        ? product.color_images
+        : {},
+  })) as Product[];
 }
+
+// ======================================
+// Productos en oferta
+// ======================================
 
 // ======================================
 // Productos en oferta
@@ -279,8 +423,14 @@ export async function getNewProducts(): Promise<Product[]> {
 export async function getOfferProducts(): Promise<Product[]> {
   const { data, error } = await supabase
     .from("products")
-    .select(PRODUCT_SELECT)
-    .not("original_price", "is", null)
+    .select(`
+      *,
+      category:categories!inner(
+        id,
+        name
+      )
+    `)
+    .eq("category.name", "Promos")
     .order("id");
 
   if (error) {
@@ -292,5 +442,17 @@ export async function getOfferProducts(): Promise<Product[]> {
     return [];
   }
 
-  return data as Product[];
+  return (data ?? []).map((product) => ({
+    ...product,
+
+    colors: Array.isArray(product.colors)
+      ? product.colors
+      : [],
+
+    color_images:
+      product.color_images &&
+      typeof product.color_images === "object"
+        ? product.color_images
+        : {},
+  })) as Product[];
 }

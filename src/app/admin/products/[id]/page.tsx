@@ -1,12 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import {
   ArrowLeft,
   ImagePlus,
+  Loader2,
+  Save,
+  Trash2,
 } from "lucide-react";
+
+import { supabase } from "@/lib/supabase";
 
 import {
   getProducts,
@@ -14,597 +19,861 @@ import {
 } from "@/services/product.service";
 
 import {
-  getBrands,
-  Brand,
-} from "@/services/brand.service";
-
-import {
-  getCategories,
-  Category,
-} from "@/services/category.service";
-
-import {
   uploadProductImage,
 } from "@/services/storage.service";
 
-import { Product } from "@/types/product";
+import {
+  Product,
+  ProductCategory,
+  ProductColorImage,
+} from "@/types/product";
 
-const AVAILABLE_SIZES = [
-  36,
-  37,
-  38,
-  39,
-  40,
-  41,
-  42,
-  43,
-  44,
+// ======================================
+// TIPOS
+// ======================================
+
+type Category = {
+  id: number;
+  name: ProductCategory;
+};
+
+const AVAILABLE_COLORS = [
+  "Negro",
+  "Blanco",
+  "Rojo",
+  "Azul",
+  "Verde",
+  "Amarillo",
+  "Gris",
+  "Beige",
+  "Rosado",
+  "Morado",
+  "Naranja",
+  "Café",
 ];
 
-function generateSlug(text: string) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
+// ======================================
+// PÁGINA
+// ======================================
 
 export default function EditProductPage() {
   const params = useParams();
   const router = useRouter();
 
-  const id = Number(params.id);
+  const productId = Number(params.id);
 
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [product, setProduct] =
+    useState<Product | null>(null);
 
-  const [brands, setBrands] = useState<Brand[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] =
+    useState<Category[]>([]);
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState("");
+  const [loading, setLoading] =
+    useState(true);
 
-  const [product, setProduct] = useState({
-    name: "",
+  const [saving, setSaving] =
+    useState(false);
+
+  const [uploadingColor, setUploadingColor] =
+    useState<string | null>(null);
+
+  const [uploadingMainImage, setUploadingMainImage] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
+
+  // ======================================
+  // FORMULARIO
+  // ======================================
+
+  const [form, setForm] = useState({
     slug: "",
+    name: "",
     description: "",
-    image: "",
     price: "",
+    original_price: "",
     stock: "",
+    image: "",
     featured: false,
-    brand_id: "",
+    is_new: false,
+    colors: [] as string[],
+    color_images: [] as ProductColorImage[],
     category_id: "",
-    sizes: [] as number[],
   });
+
+  // ======================================
+  // CARGAR DATOS
+  // ======================================
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [
-          productsData,
-          brandsData,
-          categoriesData,
-        ] = await Promise.all([
-          getProducts(),
-          getBrands(),
-          getCategories(),
-        ]);
+        setLoading(true);
+        setError("");
 
-        const foundProduct = productsData.find(
-          (item) => item.id === id
-        );
+        // Cargar producto
+        const products = await getProducts();
+
+        const foundProduct =
+          products.find(
+            (item) => item.id === productId
+          ) ?? null;
 
         if (!foundProduct) {
-          alert("Producto no encontrado.");
-          router.push("/admin/products");
+          setError("No se encontró el producto.");
+          setLoading(false);
           return;
         }
 
-        setBrands(brandsData);
-        setCategories(categoriesData);
+        setProduct(foundProduct);
 
-        setProduct({
-          name: foundProduct.name ?? "",
+        // Cargar categorías
+        const {
+          data: categoriesData,
+          error: categoriesError,
+        } = await supabase
+          .from("categories")
+          .select("id, name")
+          .order("name");
+
+        if (categoriesError) {
+          console.error(
+            "Error cargando categorías:",
+            categoriesError
+          );
+        }
+
+        setCategories(
+          (categoriesData ?? []) as Category[]
+        );
+
+        // Normalizar imágenes por color
+        const normalizedColorImages:
+          ProductColorImage[] =
+          Array.isArray(foundProduct.color_images)
+            ? foundProduct.color_images
+            : [];
+
+        // Colores existentes
+        const existingColors =
+          Array.isArray(foundProduct.colors)
+            ? foundProduct.colors
+            : [];
+
+        // Si hay imágenes por color pero colors está vacío,
+        // obtenemos los colores desde color_images
+        const colors =
+          existingColors.length > 0
+            ? existingColors
+            : normalizedColorImages.map(
+                (item) => item.color
+              );
+
+        setForm({
           slug: foundProduct.slug ?? "",
-          description: foundProduct.description ?? "",
+          name: foundProduct.name ?? "",
+          description:
+            foundProduct.description ?? "",
+          price:
+            foundProduct.price?.toString() ?? "",
+          original_price:
+            foundProduct.original_price?.toString() ??
+            "",
+          stock:
+            foundProduct.stock?.toString() ?? "",
           image: foundProduct.image ?? "",
-          price: String(foundProduct.price ?? ""),
-          stock: String(foundProduct.stock ?? ""),
-          featured: foundProduct.featured ?? false,
-          brand_id: String(foundProduct.brand_id ?? ""),
-          category_id: String(foundProduct.category_id ?? ""),
-          sizes: foundProduct.sizes ?? [],
+          featured:
+            foundProduct.featured ?? false,
+          is_new:
+            foundProduct.is_new ?? false,
+          colors,
+          color_images: normalizedColorImages,
+          category_id:
+            foundProduct.category_id?.toString() ??
+            "",
         });
-
-        setPreview(foundProduct.image ?? "");
-
       } catch (error) {
         console.error(
           "Error cargando producto:",
           error
         );
 
-        alert("No se pudo cargar el producto.");
-
-        router.push("/admin/products");
+        setError(
+          "No fue posible cargar el producto."
+        );
       } finally {
         setLoading(false);
       }
     }
 
-    if (!Number.isNaN(id)) {
+    if (!Number.isNaN(productId)) {
       loadData();
     }
-  }, [id, router]);
+  }, [productId]);
 
-  function handleNameChange(
-    e: React.ChangeEvent<HTMLInputElement>
+  // ======================================
+  // ACTUALIZAR CAMPOS
+  // ======================================
+
+  function updateField(
+    field: string,
+    value:
+      | string
+      | boolean
+      | string[]
+      | ProductColorImage[]
   ) {
-    const name = e.target.value;
-
-    setProduct((prev) => ({
-      ...prev,
-      name,
-      slug: generateSlug(name),
+    setForm((current) => ({
+      ...current,
+      [field]: value,
     }));
   }
 
-  function handleChange(
-    e: React.ChangeEvent<
-      HTMLInputElement |
-      HTMLTextAreaElement |
-      HTMLSelectElement
-    >
-  ) {
-    const {
-      name,
-      value,
-      type,
-    } = e.target;
+  // ======================================
+  // SELECCIONAR / QUITAR COLOR
+  // ======================================
 
-    setProduct((prev) => ({
-      ...prev,
-      [name]:
-        type === "checkbox"
-          ? (e.target as HTMLInputElement).checked
-          : value,
-    }));
-  }
+  function toggleColor(color: string) {
+    setForm((current) => {
+      const alreadySelected =
+        current.colors.includes(color);
 
-  function handleSizeToggle(size: number) {
-    setProduct((prev) => {
-      const exists =
-        prev.sizes.includes(size);
+      // Quitar color
+      if (alreadySelected) {
+        return {
+          ...current,
 
-      return {
-        ...prev,
+          colors: current.colors.filter(
+            (item) => item !== color
+          ),
 
-        sizes: exists
-          ? prev.sizes.filter(
-              (item) => item !== size
-            )
-          : [
-              ...prev.sizes,
-              size,
-            ].sort(
-              (a, b) => a - b
+          // También eliminamos su imagen
+          color_images:
+            current.color_images.filter(
+              (item) => item.color !== color
             ),
+        };
+      }
+
+      // Agregar color
+      return {
+        ...current,
+        colors: [
+          ...current.colors,
+          color,
+        ],
       };
     });
   }
 
-  function handleImage(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const file =
-      e.target.files?.[0];
+  // ======================================
+  // OBTENER IMAGEN DE UN COLOR
+  // ======================================
 
-    if (!file) return;
+  function getColorImage(color: string) {
+    const found =
+      form.color_images.find(
+        (item) => item.color === color
+      );
 
-    setImageFile(file);
-
-    setPreview(
-      URL.createObjectURL(file)
-    );
+    return found?.image ?? "";
   }
 
-  async function handleSubmit(
-    e: React.FormEvent
+  // ======================================
+  // SUBIR IMAGEN PRINCIPAL
+  // ======================================
+
+  async function handleMainImageUpload(
+    file: File | undefined
   ) {
-    e.preventDefault();
-
-    if (!product.name.trim()) {
-      alert(
-        "Escribe el nombre del producto."
-      );
-      return;
-    }
-
-    if (!product.brand_id) {
-      alert(
-        "Selecciona una marca."
-      );
-      return;
-    }
-
-    if (!product.category_id) {
-      alert(
-        "Selecciona una categoría."
-      );
-      return;
-    }
-
-    if (
-      !product.price ||
-      Number(product.price) <= 0
-    ) {
-      alert(
-        "Ingresa un precio válido."
-      );
-      return;
-    }
-
-    if (
-      product.stock === "" ||
-      Number(product.stock) < 0
-    ) {
-      alert(
-        "Ingresa un stock válido."
-      );
-      return;
-    }
-
-    if (
-      product.sizes.length === 0
-    ) {
-      alert(
-        "Selecciona al menos una talla."
-      );
-      return;
-    }
-
-    setSaving(true);
+    if (!file) return;
 
     try {
-      let imageUrl =
-        product.image;
+      setUploadingMainImage(true);
 
-      if (imageFile) {
-        imageUrl =
-          await uploadProductImage(
-            imageFile
+      const imageUrl =
+        await uploadProductImage(file);
+
+      setForm((current) => ({
+        ...current,
+        image: imageUrl,
+      }));
+    } catch (error) {
+      console.error(
+        "Error subiendo imagen principal:",
+        error
+      );
+
+      alert(
+        "No fue posible subir la imagen."
+      );
+    } finally {
+      setUploadingMainImage(false);
+    }
+  }
+
+  // ======================================
+  // SUBIR IMAGEN PARA UN COLOR
+  // ======================================
+
+  async function handleColorImageUpload(
+    color: string,
+    file: File | undefined
+  ) {
+    if (!file) return;
+
+    try {
+      setUploadingColor(color);
+
+      const imageUrl =
+        await uploadProductImage(file);
+
+      setForm((current) => {
+        const alreadyExists =
+          current.color_images.some(
+            (item) => item.color === color
           );
+
+        let newColorImages:
+          ProductColorImage[];
+
+        // Si ya existe, reemplazamos
+        if (alreadyExists) {
+          newColorImages =
+            current.color_images.map(
+              (item) =>
+                item.color === color
+                  ? {
+                      color,
+                      image: imageUrl,
+                    }
+                  : item
+            );
+        } else {
+          // Si no existe, agregamos
+          newColorImages = [
+            ...current.color_images,
+            {
+              color,
+              image: imageUrl,
+            },
+          ];
+        }
+
+        return {
+          ...current,
+          color_images: newColorImages,
+
+          // Aseguramos que el color exista
+          colors: current.colors.includes(color)
+            ? current.colors
+            : [
+                ...current.colors,
+                color,
+              ],
+        };
+      });
+    } catch (error) {
+      console.error(
+        "Error subiendo imagen del color:",
+        error
+      );
+
+      alert(
+        `No fue posible subir la imagen para ${color}.`
+      );
+    } finally {
+      setUploadingColor(null);
+    }
+  }
+
+  // ======================================
+  // ELIMINAR IMAGEN DE COLOR
+  // ======================================
+
+  function removeColorImage(color: string) {
+    setForm((current) => ({
+      ...current,
+
+      color_images:
+        current.color_images.filter(
+          (item) => item.color !== color
+        ),
+    }));
+  }
+
+  // ======================================
+  // GUARDAR
+  // ======================================
+
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    try {
+      setSaving(true);
+      setError("");
+
+      if (!form.name.trim()) {
+        throw new Error(
+          "El nombre del producto es obligatorio."
+        );
       }
 
-      await updateProduct(
-        id,
-        {
-          name: product.name.trim(),
+      if (!form.slug.trim()) {
+        throw new Error(
+          "El slug es obligatorio."
+        );
+      }
 
-          slug: product.slug,
+      if (!form.category_id) {
+        throw new Error(
+          "Selecciona una categoría."
+        );
+      }
 
-          description:
-            product.description.trim(),
+      if (!form.image) {
+        throw new Error(
+          "El producto debe tener una imagen principal."
+        );
+      }
 
-          image: imageUrl,
+      if (Number(form.price) < 0) {
+        throw new Error(
+          "El precio no puede ser negativo."
+        );
+      }
 
-          price:
-            Number(product.price),
+      if (Number(form.stock) < 0) {
+        throw new Error(
+          "El stock no puede ser negativo."
+        );
+      }
 
-          stock:
-            Number(product.stock),
-
-          featured:
-            product.featured,
-
-          brand_id:
-            Number(product.brand_id),
-
-          category_id:
-            Number(product.category_id),
-
-          sizes:
-            product.sizes,
-        }
-      );
+      await updateProduct(productId, {
+        slug: form.slug.trim(),
+        name: form.name.trim(),
+        description:
+          form.description.trim(),
+        price: Number(form.price),
+        original_price:
+          form.original_price.trim() !== ""
+            ? Number(form.original_price)
+            : null,
+        stock: Number(form.stock),
+        image: form.image,
+        featured: form.featured,
+        is_new: form.is_new,
+        colors: form.colors,
+        color_images: form.color_images,
+        category_id: Number(form.category_id),
+      });
 
       alert(
         "Producto actualizado correctamente."
       );
 
-      router.push(
-        "/admin/products"
-      );
-
+      router.push("/admin/products");
       router.refresh();
-
     } catch (error) {
       console.error(
         "Error actualizando producto:",
         error
       );
 
-      alert(
-        "No se pudo actualizar el producto."
+      setError(
+        error instanceof Error
+          ? error.message
+          : "No fue posible actualizar el producto."
       );
-
     } finally {
       setSaving(false);
     }
   }
 
+  // ======================================
+  // CARGANDO
+  // ======================================
+
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="flex min-h-[400px] items-center justify-center">
+        <div className="flex items-center gap-3 text-gray-500">
+          <Loader2
+            className="animate-spin"
+            size={24}
+          />
 
-        <p className="text-lg font-semibold text-gray-500">
-          Cargando producto...
-        </p>
-
+          <span>
+            Cargando producto...
+          </span>
+        </div>
       </div>
     );
   }
 
+  // ======================================
+  // ERROR
+  // ======================================
+
+  if (error && !product) {
+    return (
+      <div className="rounded-3xl bg-white p-8 shadow">
+        <h1 className="text-2xl font-black">
+          Error
+        </h1>
+
+        <p className="mt-3 text-red-600">
+          {error}
+        </p>
+
+        <button
+          type="button"
+          onClick={() =>
+            router.push("/admin/products")
+          }
+          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-black px-5 py-3 font-bold text-white"
+        >
+          <ArrowLeft size={18} />
+
+          Volver a productos
+        </button>
+      </div>
+    );
+  }
+
+  // ======================================
+  // INTERFAZ
+  // ======================================
+
   return (
-    <div className="mx-auto max-w-4xl">
-
-      {/* Volver */}
-
-      <button
-        type="button"
-        onClick={() =>
-          router.push(
-            "/admin/products"
-          )
-        }
-        className="mb-6 flex items-center gap-2 text-sm font-semibold text-gray-500 transition hover:text-black"
-      >
-        <ArrowLeft size={18} />
-
-        Volver a productos
-      </button>
+    <div className="mx-auto max-w-6xl">
 
       {/* Encabezado */}
 
-      <div className="mb-8">
+      <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 
-        <h1 className="text-5xl font-black">
-          Editar producto
-        </h1>
+        <div>
+          <button
+            type="button"
+            onClick={() =>
+              router.push("/admin/products")
+            }
+            className="mb-4 inline-flex items-center gap-2 text-sm font-bold text-gray-500 transition hover:text-black"
+          >
+            <ArrowLeft size={18} />
 
-        <p className="mt-2 text-gray-500">
-          Modifica la información del producto.
-        </p>
+            Volver a productos
+          </button>
+
+          <h1 className="text-3xl font-black tracking-tight sm:text-5xl">
+            Editar producto
+          </h1>
+
+          <p className="mt-2 text-gray-500">
+            Modifica la información, colores e
+            imágenes del producto.
+          </p>
+        </div>
 
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-8 rounded-3xl bg-white p-8 shadow"
+        className="space-y-8"
       >
 
-        {/* Información */}
+        {/* ERROR */}
 
-        <section>
+        {error && (
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-red-600">
+            {error}
+          </div>
+        )}
 
-          <h2 className="mb-5 text-2xl font-bold">
+        {/* INFORMACIÓN */}
+
+        <section className="rounded-3xl bg-white p-6 shadow sm:p-8">
+
+          <h2 className="text-2xl font-black">
             Información del producto
           </h2>
 
-          <div className="space-y-5">
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
+
+            {/* Nombre */}
 
             <div>
-
-              <label className="mb-2 block text-sm font-semibold">
-                Nombre del producto
+              <label className="mb-2 block font-bold">
+                Nombre
               </label>
 
               <input
-                name="name"
-                value={product.name}
-                onChange={handleNameChange}
-                className="w-full rounded-xl border p-4 outline-none transition focus:border-black"
-                required
-              />
-
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-2">
-
-              <div>
-
-                <label className="mb-2 block text-sm font-semibold">
-                  Marca
-                </label>
-
-                <select
-                  name="brand_id"
-                  value={product.brand_id}
-                  onChange={handleChange}
-                  className="w-full rounded-xl border bg-white p-4 outline-none focus:border-black"
-                  required
-                >
-
-                  <option value="">
-                    Selecciona una marca
-                  </option>
-
-                  {brands.map(
-                    (brand) => (
-                      <option
-                        key={brand.id}
-                        value={brand.id}
-                      >
-                        {brand.name}
-                      </option>
-                    )
-                  )}
-
-                </select>
-
-              </div>
-
-              <div>
-
-                <label className="mb-2 block text-sm font-semibold">
-                  Categoría
-                </label>
-
-                <select
-                  name="category_id"
-                  value={
-                    product.category_id
-                  }
-                  onChange={handleChange}
-                  className="w-full rounded-xl border bg-white p-4 outline-none focus:border-black"
-                  required
-                >
-
-                  <option value="">
-                    Selecciona una categoría
-                  </option>
-
-                  {categories.map(
-                    (category) => (
-                      <option
-                        key={category.id}
-                        value={category.id}
-                      >
-                        {category.name}
-                      </option>
-                    )
-                  )}
-
-                </select>
-
-              </div>
-
-            </div>
-
-            <div>
-
-              <label className="mb-2 block text-sm font-semibold">
-                Descripción
-              </label>
-
-              <textarea
-                name="description"
-                value={
-                  product.description
+                type="text"
+                value={form.name}
+                onChange={(event) =>
+                  updateField(
+                    "name",
+                    event.target.value
+                  )
                 }
-                rows={5}
-                onChange={handleChange}
-                className="w-full resize-none rounded-xl border p-4 outline-none focus:border-black"
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
               />
-
             </div>
 
-            <div>
+            {/* Slug */}
 
-              <label className="mb-2 block text-sm font-semibold">
-                URL del producto
+            <div>
+              <label className="mb-2 block font-bold">
+                Slug
               </label>
 
-              <div className="rounded-xl bg-gray-50 p-4 text-sm text-gray-500">
-                /producto/
-                {product.slug}
-              </div>
-
+              <input
+                type="text"
+                value={form.slug}
+                onChange={(event) =>
+                  updateField(
+                    "slug",
+                    event.target.value
+                  )
+                }
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
+              />
             </div>
 
-          </div>
-
-        </section>
-
-        {/* Precio */}
-
-        <section className="border-t pt-8">
-
-          <h2 className="mb-5 text-2xl font-bold">
-            Precio e inventario
-          </h2>
-
-          <div className="grid gap-5 md:grid-cols-2">
+            {/* Precio */}
 
             <div>
-
-              <label className="mb-2 block text-sm font-semibold">
+              <label className="mb-2 block font-bold">
                 Precio
               </label>
 
               <input
                 type="number"
-                name="price"
-                value={product.price}
                 min="0"
-                onChange={handleChange}
-                className="w-full rounded-xl border p-4 outline-none focus:border-black"
-                required
+                value={form.price}
+                onChange={(event) =>
+                  updateField(
+                    "price",
+                    event.target.value
+                  )
+                }
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
               />
-
             </div>
 
-            <div>
+            {/* Precio anterior */}
 
-              <label className="mb-2 block text-sm font-semibold">
-                Stock disponible
+            <div>
+              <label className="mb-2 block font-bold">
+                Precio anterior
+                <span className="ml-2 text-sm font-normal text-gray-400">
+                  Opcional
+                </span>
               </label>
 
               <input
                 type="number"
-                name="stock"
-                value={product.stock}
                 min="0"
-                onChange={handleChange}
-                className="w-full rounded-xl border p-4 outline-none focus:border-black"
-                required
+                value={form.original_price}
+                onChange={(event) =>
+                  updateField(
+                    "original_price",
+                    event.target.value
+                  )
+                }
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
+              />
+            </div>
+
+            {/* Stock */}
+
+            <div>
+              <label className="mb-2 block font-bold">
+                Stock
+              </label>
+
+              <input
+                type="number"
+                min="0"
+                value={form.stock}
+                onChange={(event) =>
+                  updateField(
+                    "stock",
+                    event.target.value
+                  )
+                }
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
+              />
+            </div>
+
+            {/* Categoría */}
+
+            <div>
+              <label className="mb-2 block font-bold">
+                Categoría
+              </label>
+
+              <select
+                value={form.category_id}
+                onChange={(event) =>
+                  updateField(
+                    "category_id",
+                    event.target.value
+                  )
+                }
+                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 outline-none transition focus:border-black"
+              >
+                <option value="">
+                  Selecciona una categoría
+                </option>
+
+                {categories.map(
+                  (category) => (
+                    <option
+                      key={category.id}
+                      value={category.id}
+                    >
+                      {category.name}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+
+          </div>
+
+          {/* Descripción */}
+
+          <div className="mt-5">
+            <label className="mb-2 block font-bold">
+              Descripción
+            </label>
+
+            <textarea
+              rows={5}
+              value={form.description}
+              onChange={(event) =>
+                updateField(
+                  "description",
+                  event.target.value
+                )
+              }
+              className="w-full resize-none rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
+            />
+          </div>
+
+        </section>
+
+        {/* IMAGEN PRINCIPAL */}
+
+        <section className="rounded-3xl bg-white p-6 shadow sm:p-8">
+
+          <h2 className="text-2xl font-black">
+            Imagen principal
+          </h2>
+
+          <p className="mt-2 text-gray-500">
+            Esta será la imagen principal del
+            producto.
+          </p>
+
+          <div className="mt-6">
+
+            {form.image ? (
+              <div className="overflow-hidden rounded-2xl border border-gray-200">
+
+                <div className="relative aspect-square max-w-md bg-gray-100">
+
+                  <Image
+                    src={form.image}
+                    alt={form.name}
+                    fill
+                    className="object-contain"
+                  />
+
+                </div>
+
+              </div>
+            ) : (
+              <div className="flex aspect-square max-w-md items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-gray-50 text-gray-400">
+                Sin imagen
+              </div>
+            )}
+
+            <label className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-black px-5 py-3 font-bold text-white transition hover:bg-red-600">
+
+              {uploadingMainImage ? (
+                <>
+                  <Loader2
+                    size={18}
+                    className="animate-spin"
+                  />
+
+                  Subiendo...
+                </>
+              ) : (
+                <>
+                  <ImagePlus size={18} />
+
+                  Cambiar imagen
+                </>
+              )}
+
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                disabled={uploadingMainImage}
+                onChange={(event) =>
+                  handleMainImageUpload(
+                    event.target.files?.[0]
+                  )
+                }
+                className="hidden"
               />
 
-            </div>
+            </label>
 
           </div>
 
         </section>
 
-        {/* Tallas */}
+        {/* COLORES */}
 
-        <section className="border-t pt-8">
+        <section className="rounded-3xl bg-white p-6 shadow sm:p-8">
 
-          <h2 className="mb-2 text-2xl font-bold">
-            Tallas disponibles
+          <h2 className="text-2xl font-black">
+            Colores disponibles
           </h2>
 
-          <p className="mb-5 text-sm text-gray-500">
-            Selecciona las tallas disponibles.
+          <p className="mt-2 text-gray-500">
+            Selecciona los colores que existen
+            para este producto.
           </p>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-3">
 
-            {AVAILABLE_SIZES.map(
-              (size) => {
-
-                const selected =
-                  product.sizes.includes(
-                    size
-                  );
+            {AVAILABLE_COLORS.map(
+              (color) => {
+                const isSelected =
+                  form.colors.includes(color);
 
                 return (
                   <button
-                    key={size}
+                    key={color}
                     type="button"
                     onClick={() =>
-                      handleSizeToggle(
-                        size
-                      )
+                      toggleColor(color)
                     }
-                    className={`flex h-12 w-14 items-center justify-center rounded-xl border font-bold transition ${
-                      selected
+                    className={`rounded-xl border-2 px-5 py-3 font-bold transition ${
+                      isSelected
                         ? "border-black bg-black text-white"
-                        : "border-gray-200 bg-gray-50 text-gray-700 hover:border-black"
+                        : "border-gray-200 bg-white text-gray-700 hover:border-black"
                     }`}
                   >
-                    {size}
+                    {color}
                   </button>
                 );
               }
@@ -614,101 +883,226 @@ export default function EditProductPage() {
 
         </section>
 
-        {/* Imagen */}
+        {/* IMÁGENES POR COLOR */}
 
-        <section className="border-t pt-8">
-
-          <h2 className="mb-2 text-2xl font-bold">
-            Imagen del producto
-          </h2>
-
-          <p className="mb-5 text-sm text-gray-500">
-            Puedes conservar la imagen actual o subir una nueva.
-          </p>
-
-          <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 p-8 transition hover:border-black">
-
-            <ImagePlus size={40} />
-
-            <span className="mt-3 font-semibold">
-              Cambiar imagen
-            </span>
-
-            <span className="mt-1 text-sm text-gray-400">
-              JPG, PNG o WEBP
-            </span>
-
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={handleImage}
-              className="hidden"
-            />
-
-          </label>
-
-          {preview && (
-            <div className="relative mt-5 h-72 w-full overflow-hidden rounded-2xl border bg-gray-50">
-
-              <Image
-                src={preview}
-                alt={
-                  product.name
-                }
-                fill
-                className="object-contain"
-                unoptimized
-              />
-
-            </div>
-          )}
-
-        </section>
-
-        {/* Destacado */}
-
-        <section className="border-t pt-8">
-
-          <label className="flex cursor-pointer items-center gap-3">
-
-            <input
-              type="checkbox"
-              name="featured"
-              checked={
-                product.featured
-              }
-              onChange={handleChange}
-              className="h-5 w-5"
-            />
+        {form.colors.length > 0 && (
+          <section className="rounded-3xl bg-white p-6 shadow sm:p-8">
 
             <div>
+              <h2 className="text-2xl font-black">
+                Imagen para cada color
+              </h2>
 
-              <p className="font-semibold">
+              <p className="mt-2 text-gray-500">
+                Sube la imagen correspondiente
+                a cada variante. Cuando el cliente
+                seleccione un color, se mostrará
+                automáticamente esta imagen.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+              {form.colors.map(
+                (color) => {
+                  const image =
+                    getColorImage(color);
+
+                  const isUploading =
+                    uploadingColor === color;
+
+                  return (
+                    <div
+                      key={color}
+                      className="overflow-hidden rounded-2xl border border-gray-200"
+                    >
+
+                      {/* Encabezado */}
+
+                      <div className="flex items-center justify-between border-b p-4">
+
+                        <h3 className="font-black">
+                          {color}
+                        </h3>
+
+                        {image && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              removeColorImage(
+                                color
+                              )
+                            }
+                            title={`Eliminar imagen de ${color}`}
+                            className="rounded-lg p-2 text-red-600 transition hover:bg-red-50"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        )}
+
+                      </div>
+
+                      {/* Imagen */}
+
+                      <div className="relative aspect-square bg-gray-100">
+
+                        {image ? (
+                          <Image
+                            src={image}
+                            alt={`${form.name} ${color}`}
+                            fill
+                            className="object-contain"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full flex-col items-center justify-center gap-3 text-gray-400">
+
+                            <ImagePlus size={36} />
+
+                            <span className="text-sm">
+                              Sin imagen para este color
+                            </span>
+
+                          </div>
+                        )}
+
+                      </div>
+
+                      {/* Subir */}
+
+                      <div className="p-4">
+
+                        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-black px-4 py-3 text-center font-bold text-white transition hover:bg-red-600">
+
+                          {isUploading ? (
+                            <>
+                              <Loader2
+                                size={18}
+                                className="animate-spin"
+                              />
+
+                              Subiendo...
+                            </>
+                          ) : (
+                            <>
+                              <ImagePlus size={18} />
+
+                              {image
+                                ? "Cambiar imagen"
+                                : "Subir imagen"}
+                            </>
+                          )}
+
+                          <input
+                            type="file"
+                            accept="image/png,image/jpeg,image/webp"
+                            disabled={isUploading}
+                            onChange={(event) =>
+                              handleColorImageUpload(
+                                color,
+                                event.target.files?.[0]
+                              )
+                            }
+                            className="hidden"
+                          />
+
+                        </label>
+
+                      </div>
+
+                    </div>
+                  );
+                }
+              )}
+
+            </div>
+
+          </section>
+        )}
+
+        {/* OPCIONES */}
+
+        <section className="rounded-3xl bg-white p-6 shadow sm:p-8">
+
+          <h2 className="text-2xl font-black">
+            Opciones
+          </h2>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+
+            <button
+              type="button"
+              onClick={() =>
+                updateField(
+                  "featured",
+                  !form.featured
+                )
+              }
+              className={`rounded-2xl border-2 p-5 text-left transition ${
+                form.featured
+                  ? "border-black bg-black text-white"
+                  : "border-gray-200 hover:border-black"
+              }`}
+            >
+              <p className="font-black">
                 Producto destacado
               </p>
 
-              <p className="text-sm text-gray-500">
-                Mostrar este producto en las secciones destacadas.
+              <p
+                className={`mt-1 text-sm ${
+                  form.featured
+                    ? "text-gray-300"
+                    : "text-gray-500"
+                }`}
+              >
+                Mostrar en la sección de productos
+                destacados.
+              </p>
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                updateField(
+                  "is_new",
+                  !form.is_new
+                )
+              }
+              className={`rounded-2xl border-2 p-5 text-left transition ${
+                form.is_new
+                  ? "border-black bg-black text-white"
+                  : "border-gray-200 hover:border-black"
+              }`}
+            >
+              <p className="font-black">
+                Producto nuevo
               </p>
 
-            </div>
+              <p
+                className={`mt-1 text-sm ${
+                  form.is_new
+                    ? "text-gray-300"
+                    : "text-gray-500"
+                }`}
+              >
+                Mostrar en la sección de novedades.
+              </p>
+            </button>
 
-          </label>
+          </div>
 
         </section>
 
-        {/* Botones */}
+        {/* GUARDAR */}
 
-        <div className="flex flex-col-reverse gap-3 border-t pt-8 sm:flex-row sm:justify-end">
+        <div className="flex flex-col-reverse gap-4 pb-10 sm:flex-row sm:justify-end">
 
           <button
             type="button"
             onClick={() =>
-              router.push(
-                "/admin/products"
-              )
+              router.push("/admin/products")
             }
-            className="rounded-xl border border-gray-200 px-8 py-4 font-bold transition hover:bg-gray-100"
+            disabled={saving}
+            className="rounded-xl border border-gray-300 px-6 py-4 font-bold transition hover:bg-gray-100 disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -716,11 +1110,24 @@ export default function EditProductPage() {
           <button
             type="submit"
             disabled={saving}
-            className="rounded-xl bg-black px-8 py-4 font-bold text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center justify-center gap-2 rounded-xl bg-black px-7 py-4 font-bold text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {saving
-              ? "Guardando cambios..."
-              : "Guardar cambios"}
+            {saving ? (
+              <>
+                <Loader2
+                  size={20}
+                  className="animate-spin"
+                />
+
+                Guardando...
+              </>
+            ) : (
+              <>
+                <Save size={20} />
+
+                Guardar cambios
+              </>
+            )}
           </button>
 
         </div>

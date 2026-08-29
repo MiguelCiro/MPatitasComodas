@@ -1,67 +1,286 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { Product } from "@/types/product";
 import { CartContext } from "@/context/CartContext";
 
 import ProductInfo from "@/components/ProductInfo/ProductInfo";
-import SizeSelector from "@/components/SizeSelector/SizeSelector";
+import ColorSelector from "@/components/ColorSelector/ColorSelector";
 import QuantitySelector from "@/components/QuantitySelector/QuantitySelector";
 
 type Props = {
   product: Product;
   onClose: () => void;
+  onImageChange?: (image: string) => void;
 };
+
+type ColorImage = {
+  color: string;
+  image: string;
+};
+
+// ==========================================
+// Normalizar colores
+// ==========================================
+
+function normalizeColor(color: string) {
+  return color
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+// ==========================================
+// Convertir color_images a array
+// ==========================================
+
+function getColorImages(
+  value: unknown
+): ColorImage[] {
+  // ----------------------------------------
+  // Formato actual:
+  //
+  // [
+  //   {
+  //     color: "Negro",
+  //     image: "..."
+  //   }
+  // ]
+  // ----------------------------------------
+
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is ColorImage =>
+        typeof item === "object" &&
+        item !== null &&
+        typeof (item as ColorImage)
+          .color === "string" &&
+        typeof (item as ColorImage)
+          .image === "string"
+    );
+  }
+
+  // ----------------------------------------
+  // Formato antiguo:
+  //
+  // {
+  //   Negro: "...",
+  //   Blanco: "..."
+  // }
+  // ----------------------------------------
+
+  if (
+    typeof value === "object" &&
+    value !== null
+  ) {
+    return Object.entries(
+      value as Record<string, unknown>
+    )
+      .filter(
+        ([, image]) =>
+          typeof image === "string"
+      )
+      .map(([color, image]) => ({
+        color,
+        image: image as string,
+      }));
+  }
+
+  // ----------------------------------------
+  // Si Supabase devuelve JSON como string
+  // ----------------------------------------
+
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+
+      return getColorImages(parsed);
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+}
 
 export default function ProductDetail({
   product,
   onClose,
+  onImageChange,
 }: Props) {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } =
+    useContext(CartContext);
 
-  const [selectedSize, setSelectedSize] =
-    useState<number | null>(null);
+  // ==========================================
+  // COLORES
+  // ==========================================
 
-  const [quantity, setQuantity] = useState(1);
+  const colors = product.colors ?? [];
 
-  /*
-   * Algunos productos pueden venir desde Supabase
-   * con sizes = null.
-   *
-   * Convertimos null en un array vacío para evitar
-   * errores como:
-   *
-   * Cannot read properties of null (reading '0')
-   */
-  const sizes = product.sizes ?? [];
+  // ==========================================
+  // IMÁGENES POR COLOR
+  // ==========================================
 
-  useEffect(() => {
-    if (sizes.length > 0) {
-      setSelectedSize(sizes[0]);
-    } else {
-      setSelectedSize(null);
+  const colorImages = useMemo(
+    () =>
+      getColorImages(
+        product.color_images
+      ),
+    [product.color_images]
+  );
+
+  // ==========================================
+  // COLOR SELECCIONADO
+  // ==========================================
+
+  const [selectedColor, setSelectedColor] =
+    useState<string | null>(
+      colors[0] ?? null
+    );
+
+  // ==========================================
+  // CANTIDAD
+  // ==========================================
+
+  const [quantity, setQuantity] =
+    useState(1);
+
+  // ==========================================
+  // IMAGEN SELECCIONADA
+  // ==========================================
+
+  const selectedImage = useMemo(() => {
+    if (!selectedColor) {
+      return product.image;
     }
 
-    setQuantity(1);
-  }, [product]);
+    const found =
+      colorImages.find(
+        (item) =>
+          normalizeColor(item.color) ===
+          normalizeColor(
+            selectedColor
+          )
+      );
 
-  function handleAddToCart() {
-    /*
-     * Para agregar un producto al carrito necesitamos
-     * tener una talla seleccionada.
-     */
-    if (selectedSize === null) {
-      alert("Selecciona una talla.");
+    return (
+      found?.image ??
+      product.image
+    );
+  }, [
+    selectedColor,
+    colorImages,
+    product.image,
+  ]);
+
+  // ==========================================
+  // AVISAR AL DRAWER CUANDO CAMBIA IMAGEN
+  // ==========================================
+
+  useEffect(() => {
+    onImageChange?.(selectedImage);
+  }, [
+    selectedImage,
+    onImageChange,
+  ]);
+
+  // ==========================================
+  // CUANDO CAMBIA EL PRODUCTO
+  // ==========================================
+
+  useEffect(() => {
+    setSelectedColor(
+      colors[0] ?? null
+    );
+
+    setQuantity(1);
+  }, [product.id]);
+
+  // ==========================================
+  // CAMBIAR COLOR
+  // ==========================================
+
+  function handleColorChange(
+    color: string
+  ) {
+    setSelectedColor(color);
+  }
+
+  // ==========================================
+  // AUMENTAR
+  // ==========================================
+
+  function increaseQuantity() {
+    if (
+      quantity >= product.stock
+    ) {
       return;
     }
 
-    /*
-     * Agregamos la cantidad seleccionada al carrito.
-     */
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product, selectedSize);
+    setQuantity(
+      (current) => current + 1
+    );
+  }
+
+  // ==========================================
+  // DISMINUIR
+  // ==========================================
+
+  function decreaseQuantity() {
+    if (quantity <= 1) {
+      return;
     }
+
+    setQuantity(
+      (current) => current - 1
+    );
+  }
+
+  // ==========================================
+  // AGREGAR AL CARRITO
+  // ==========================================
+
+  function handleAddToCart() {
+    if (!selectedColor) {
+      alert(
+        "Selecciona un color."
+      );
+
+      return;
+    }
+
+    if (product.stock <= 0) {
+      return;
+    }
+
+    if (quantity < 1) {
+      return;
+    }
+
+    // ========================================
+    // IMPORTANTE:
+    //
+    // Creamos una copia del producto
+    // usando la imagen del color elegido.
+    // ========================================
+
+    const productForCart: Product = {
+      ...product,
+      image: selectedImage,
+    };
+
+    addToCart(
+      productForCart,
+      selectedColor,
+      quantity
+    );
 
     onClose();
   }
@@ -69,53 +288,76 @@ export default function ProductDetail({
   return (
     <div className="flex w-full flex-col justify-center px-6 py-8 sm:px-10 lg:px-16 lg:py-14">
 
-      {/* Información del producto */}
+      {/* ==================================== */}
+      {/* INFORMACIÓN */}
+      {/* ==================================== */}
+
       <ProductInfo
-        brand={product.brand.name}
         name={product.name}
         description={product.description}
         price={product.price}
       />
 
-      {/* Selector de tallas */}
-      {sizes.length > 0 ? (
-        <SizeSelector
-          sizes={sizes}
-          selectedSize={selectedSize}
-          onSelect={setSelectedSize}
+      {/* ==================================== */}
+      {/* COLORES */}
+      {/* ==================================== */}
+
+      {colors.length > 0 ? (
+        <ColorSelector
+          colors={colors}
+          selectedColor={selectedColor}
+          onSelect={handleColorChange}
         />
       ) : (
         <div className="mt-6 rounded-xl bg-gray-100 px-4 py-3 text-sm text-gray-600">
-          Este producto no tiene tallas disponibles.
+          Este producto no tiene colores
+          disponibles.
         </div>
       )}
 
-      {/* Selector de cantidad */}
+      {/* ==================================== */}
+      {/* CANTIDAD */}
+      {/* ==================================== */}
+
       <QuantitySelector
         quantity={quantity}
-        onIncrease={() =>
-          setQuantity(quantity + 1)
-        }
-        onDecrease={() =>
-          quantity > 1 &&
-          setQuantity(quantity - 1)
-        }
+        onIncrease={increaseQuantity}
+        onDecrease={decreaseQuantity}
       />
 
-      {/* Stock */}
+      {/* ==================================== */}
+      {/* STOCK */}
+      {/* ==================================== */}
+
       <div className="mt-8">
-        <p className="text-lg font-semibold text-green-600">
-          Stock disponible: {product.stock}
+        <p
+          className={`text-lg font-semibold ${
+            product.stock > 0
+              ? "text-green-600"
+              : "text-red-600"
+          }`}
+        >
+          {product.stock > 0
+            ? `Stock disponible: ${product.stock}`
+            : "Producto agotado"}
         </p>
       </div>
 
-      {/* Agregar al carrito */}
+      {/* ==================================== */}
+      {/* CARRITO */}
+      {/* ==================================== */}
+
       <button
         type="button"
         onClick={handleAddToCart}
-        className="mt-12 h-16 w-full rounded-xl bg-black text-lg font-bold text-white transition hover:bg-red-600"
+        disabled={
+          product.stock <= 0
+        }
+        className="mt-12 h-16 w-full rounded-xl bg-black text-lg font-bold text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:bg-gray-300"
       >
-        Agregar al carrito
+        {product.stock <= 0
+          ? "Agotado"
+          : "Agregar al carrito"}
       </button>
 
     </div>
