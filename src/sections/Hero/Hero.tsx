@@ -6,7 +6,9 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-[#070708] text-white">
-      {/* Fondo ambiental */}
+      {/* =========================================
+          FONDO AMBIENTAL
+      ========================================= */}
 
       <div className="absolute inset-0 overflow-hidden">
         <div className="hero-red-glow hero-red-glow-one" />
@@ -14,17 +16,41 @@ export default function Hero() {
         <div className="hero-grid" />
       </div>
 
-      <div className="relative mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-8 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-16">
-        {/* ================================= */}
-        {/* TEXTO */}
-        {/* ================================= */}
+      {/* =========================================
+          CONTENIDO
+      ========================================= */}
+
+      <div className="relative mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-8 px-5 py-12 sm:px-8 sm:py-14 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-16">
+
+        {/* =====================================
+            TEXTO
+        ===================================== */}
 
         <div className="relative z-10 max-w-2xl">
-          <p className="mb-6 text-[10px] font-bold uppercase tracking-[3px] text-red-500 sm:text-xs sm:tracking-[5px]">
-            ¡Estrena Medias Hoy! · Envios Nacionales  
+
+          {/* TEXTO SUPERIOR */}
+
+          <p className="mb-5 max-w-full text-[9px] font-bold uppercase leading-5 tracking-[2.5px] text-red-500 sm:text-xs sm:tracking-[5px]">
+            ¡Estrena Medias Hoy! · Envíos Nacionales
           </p>
 
-          <h1 className="max-w-xl text-4xl font-black leading-[0.98] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl">
+          {/* TÍTULO */}
+
+          <h1
+            className="
+              max-w-full
+              text-[2.65rem]
+              font-black
+              leading-[0.98]
+              tracking-[-0.04em]
+              text-white
+              sm:max-w-xl
+              sm:text-6xl
+              sm:tracking-tight
+              lg:text-7xl
+              xl:text-8xl
+            "
+          >
             Every step
             <br />
             deserves its
@@ -32,43 +58,99 @@ export default function Hero() {
             own style.
           </h1>
 
-          <p className="mt-7 max-w-lg text-base leading-7 text-gray-300 sm:text-lg">
+          {/* DESCRIPCIÓN */}
+
+          <p className="mt-6 max-w-lg text-[15px] leading-7 text-gray-300 sm:text-lg">
             Calcetines con diseños únicos para cada personalidad.
           </p>
 
-          <p className="mt-2 max-w-lg text-base leading-7 text-gray-400 sm:text-lg">
+          <p className="mt-2 max-w-lg text-[15px] leading-7 text-gray-400 sm:text-lg">
             Comodidad, color y estilo para acompañarte en cada paso.
           </p>
 
-          {/* Botones */}
+          {/* =====================================
+              BOTONES
+          ===================================== */}
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+
             <Link
               href="/ofertas"
-              className="flex min-h-14 items-center justify-center rounded-xl bg-red-600 px-8 font-bold text-white transition duration-300 hover:scale-[1.02] hover:bg-red-500 hover:shadow-[0_0_35px_rgba(220,38,38,0.45)]"
+              className="
+                flex
+                min-h-14
+                w-full
+                items-center
+                justify-center
+                rounded-xl
+                bg-red-600
+                px-6
+                text-base
+                font-bold
+                text-white
+                transition
+                duration-300
+                hover:scale-[1.02]
+                hover:bg-red-500
+                hover:shadow-[0_0_35px_rgba(220,38,38,0.45)]
+                sm:w-auto
+                sm:px-8
+              "
             >
               Explorar Ofertas
             </Link>
 
             <Link
               href="/lanzamientos"
-              className="flex min-h-14 items-center justify-center rounded-xl border border-white/25 bg-white/[0.03] px-8 font-bold text-white transition duration-300 hover:border-red-500/60 hover:bg-white/[0.08]"
+              className="
+                flex
+                min-h-14
+                w-full
+                items-center
+                justify-center
+                rounded-xl
+                border
+                border-white/25
+                bg-white/[0.03]
+                px-6
+                text-base
+                font-bold
+                text-white
+                transition
+                duration-300
+                hover:border-red-500/60
+                hover:bg-white/[0.08]
+                sm:w-auto
+                sm:px-8
+              "
             >
               Nuevos Estilos
             </Link>
+
           </div>
         </div>
 
-        {/* ================================= */}
-        {/* ESCENA DE LA MEDIA */}
-        {/* ================================= */}
+        {/* =====================================
+            ESCENA DE LA MEDIA
+        ===================================== */}
 
-        <div className="relative flex min-h-[470px] items-center justify-center sm:min-h-[560px] lg:min-h-[680px]">
-          {/* Aura trasera */}
+        <div
+          className="
+            relative
+            flex
+            min-h-[390px]
+            items-center
+            justify-center
+            sm:min-h-[560px]
+            lg:min-h-[680px]
+          "
+        >
+
+          {/* AURA */}
 
           <div className="hero-sneaker-aura" />
 
-          {/* Partículas */}
+          {/* PARTÍCULAS */}
 
           <span className="hero-particle hero-particle-1" />
           <span className="hero-particle hero-particle-2" />
@@ -79,7 +161,9 @@ export default function Hero() {
           <span className="hero-particle hero-particle-7" />
           <span className="hero-particle hero-particle-8" />
 
-          {/* MEDIA FLOTANTE */}
+          {/* =================================
+              IMAGEN
+          ================================= */}
 
           <div className="hero-sneaker-wrapper">
             <Image
@@ -88,21 +172,30 @@ export default function Hero() {
               width={800}
               height={800}
               priority
-              className="hero-sneaker relative z-20 h-auto w-full object-contain"
+              className="
+                hero-sneaker
+                relative
+                z-20
+                h-auto
+                w-full
+                object-contain
+              "
             />
           </div>
 
-          {/* Sombra */}
+          {/* SOMBRA */}
 
           <div className="hero-sneaker-shadow" />
 
-          {/* Plataforma */}
+          {/* PLATAFORMA */}
 
           <div className="hero-platform">
             <div className="hero-platform-top" />
             <div className="hero-platform-front" />
           </div>
+
         </div>
+
       </div>
     </section>
   );

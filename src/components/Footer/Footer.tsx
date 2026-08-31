@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+
+import {
+  Mail,
+  MapPin,
+  Phone,
+} from "lucide-react";
 
 import {
   FaInstagram,
@@ -10,25 +15,27 @@ export default function Footer() {
   return (
     <footer className="mt-24 bg-black text-white">
 
-      {/* PARTE SUPERIOR */}
+      {/* =========================================
+          PARTE SUPERIOR
+      ========================================= */}
 
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-6 sm:py-16">
 
-        <div className="grid gap-14 lg:grid-cols-[1.4fr_2fr]">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr] lg:gap-14">
 
           {/* LOGO */}
 
-          <div>
+          <div className="min-w-0">
 
-            <h2 className="text-4xl font-black tracking-tight">
+            <h2 className="text-3xl font-black tracking-tight sm:text-4xl">
               MPATITAS CÓMODAS
             </h2>
 
-            <p className="mt-3 text-lg uppercase tracking-[4px] text-gray-400">
+            <p className="mt-3 text-sm uppercase tracking-[3px] text-gray-400 sm:text-lg sm:tracking-[4px]">
               Comodidad para cada paso.
             </p>
 
-            <p className="mt-8 max-w-md leading-8 text-gray-400">
+            <p className="mt-7 max-w-md text-sm leading-7 text-gray-400 sm:mt-8 sm:text-base sm:leading-8">
               Calcetines diseñados para acompañarte
               en cada paso. Comodidad, calidad,
               color y estilos para cada personalidad.
@@ -38,29 +45,51 @@ export default function Footer() {
 
           {/* NEWSLETTER */}
 
-          <div className="rounded-3xl border border-gray-800 bg-zinc-900 p-6 sm:p-8">
+          <div className="rounded-3xl border border-gray-800 bg-zinc-900 p-5 sm:p-8">
 
-            <h3 className="text-2xl font-black sm:text-3xl">
+            <h3 className="text-xl font-black sm:text-3xl">
               Únete a MPatitas Cómodas
             </h3>
 
-            <p className="mt-3 leading-7 text-gray-400">
+            <p className="mt-3 text-sm leading-7 text-gray-400 sm:text-base">
               Recibe promociones, descuentos,
               nuevos estilos y novedades antes que
               todos.
             </p>
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:gap-4">
 
               <input
                 type="email"
                 placeholder="Tu correo electrónico"
-                className="h-14 flex-1 rounded-xl border border-gray-700 bg-black px-5 outline-none transition focus:border-red-500"
+                className="
+                  h-14
+                  min-w-0
+                  flex-1
+                  rounded-xl
+                  border
+                  border-gray-700
+                  bg-black
+                  px-5
+                  text-sm
+                  outline-none
+                  transition
+                  focus:border-red-500
+                "
               />
 
               <button
                 type="button"
-                className="h-14 rounded-xl bg-red-600 px-8 font-bold transition hover:bg-red-700"
+                className="
+                  h-14
+                  shrink-0
+                  rounded-xl
+                  bg-red-600
+                  px-7
+                  font-bold
+                  transition
+                  hover:bg-red-700
+                "
               >
                 Suscribirme
               </button>
@@ -75,21 +104,23 @@ export default function Footer() {
 
       <div className="border-t border-gray-800" />
 
-      {/* LINKS */}
+      {/* =========================================
+          LINKS
+      ========================================= */}
 
-      <div className="mx-auto max-w-7xl px-6 py-12 sm:py-14">
+      <div className="mx-auto max-w-7xl px-5 py-10 sm:px-6 sm:py-14">
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-12 lg:grid-cols-4 lg:gap-12">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 lg:grid-cols-4 lg:gap-12">
 
           {/* TIENDA */}
 
-          <div>
+          <div className="min-w-0">
 
-            <h3 className="mb-5 text-xl font-bold">
+            <h3 className="mb-5 text-lg font-bold sm:text-xl">
               Tienda
             </h3>
 
-            <div className="space-y-3 text-gray-400">
+            <div className="space-y-3 text-sm text-gray-400 sm:text-base">
 
               <Link
                 href="/hombre"
@@ -139,13 +170,13 @@ export default function Footer() {
 
           {/* AYUDA */}
 
-          <div>
+          <div className="min-w-0">
 
-            <h3 className="mb-5 text-xl font-bold">
+            <h3 className="mb-5 text-lg font-bold sm:text-xl">
               Ayuda
             </h3>
 
-            <div className="space-y-3 text-gray-400">
+            <div className="space-y-3 text-sm text-gray-400 sm:text-base">
 
               <Link
                 href="/pagos"
@@ -181,13 +212,15 @@ export default function Footer() {
 
           {/* CONTACTO */}
 
-          <div className="border-t border-gray-800 pt-10 lg:border-t-0 lg:pt-0">
+          <div className="min-w-0 border-t border-gray-800 pt-8 lg:border-t-0 lg:pt-0">
 
-            <h3 className="mb-5 text-xl font-bold">
+            <h3 className="mb-5 text-lg font-bold sm:text-xl">
               Contacto
             </h3>
 
-            <div className="space-y-5 text-gray-400">
+            <div className="space-y-5 text-sm text-gray-400 sm:text-base">
+
+              {/* UBICACIÓN */}
 
               <div className="flex items-start gap-3">
 
@@ -196,11 +229,13 @@ export default function Footer() {
                   className="mt-1 shrink-0"
                 />
 
-                <span>
+                <span className="leading-6">
                   Medellín, Colombia
                 </span>
 
               </div>
+
+              {/* TELÉFONO */}
 
               <a
                 href="tel:+573248343679"
@@ -212,11 +247,13 @@ export default function Footer() {
                   className="mt-1 shrink-0"
                 />
 
-                <span>
+                <span className="whitespace-nowrap">
                   +57 324 834 3679
                 </span>
 
               </a>
+
+              {/* CORREO */}
 
               <a
                 href="mailto:mpatitascomodas@gmail.com"
@@ -228,7 +265,7 @@ export default function Footer() {
                   className="mt-1 shrink-0"
                 />
 
-                <span className="break-all">
+                <span className="break-words leading-6">
                   mpatitascomodas@gmail.com
                 </span>
 
@@ -240,36 +277,58 @@ export default function Footer() {
 
           {/* REDES */}
 
-          <div className="border-t border-gray-800 pt-10 lg:border-t-0 lg:pt-0">
+          <div className="min-w-0 border-t border-gray-800 pt-8 lg:border-t-0 lg:pt-0">
 
-            <h3 className="mb-5 text-xl font-bold">
+            <h3 className="mb-5 text-lg font-bold sm:text-xl">
               Síguenos
             </h3>
 
             <div className="flex flex-wrap gap-3">
+
+              {/* INSTAGRAM */}
 
               <a
                 href="https://www.instagram.com/mpatitascomodas/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
+                className="
+                  flex
+                  h-11
+                  w-11
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-zinc-900
+                  transition
+                  hover:bg-red-600
+                "
               >
-
                 <FaInstagram size={19} />
-
               </a>
+
+              {/* WHATSAPP */}
 
               <a
                 href="https://wa.me/573248343679"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 transition hover:bg-red-600"
+                className="
+                  flex
+                  h-11
+                  w-11
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-zinc-900
+                  transition
+                  hover:bg-red-600
+                "
               >
-
                 <FaWhatsapp size={19} />
-
               </a>
 
             </div>
@@ -280,13 +339,33 @@ export default function Footer() {
 
       </div>
 
-      {/* PARTE INFERIOR */}
+      {/* =========================================
+          PARTE INFERIOR
+      ========================================= */}
 
       <div className="border-t border-gray-800">
 
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-6 py-7 text-center text-sm text-gray-500 md:flex-row md:text-left">
+        <div
+          className="
+            mx-auto
+            flex
+            max-w-7xl
+            flex-col
+            items-center
+            justify-between
+            gap-5
+            px-5
+            py-7
+            text-center
+            text-sm
+            text-gray-500
+            md:flex-row
+            md:text-left
+            sm:px-6
+          "
+        >
 
-          <p>
+          <p className="max-w-md leading-6">
             © 2026 MPatitas Cómodas. Todos los
             derechos reservados.
           </p>
@@ -295,21 +374,21 @@ export default function Footer() {
 
             <Link
               href="/privacidad"
-              className="transition hover:text-red-500"
+              className="whitespace-nowrap transition hover:text-red-500"
             >
               Privacidad
             </Link>
 
             <Link
               href="/terminos"
-              className="transition hover:text-red-500"
+              className="whitespace-nowrap transition hover:text-red-500"
             >
               Términos
             </Link>
 
             <Link
               href="/cookies"
-              className="transition hover:text-red-500"
+              className="whitespace-nowrap transition hover:text-red-500"
             >
               Cookies
             </Link>
