@@ -125,7 +125,7 @@ export default function AdminLayout({
 
         <div>
           <h1 className="text-xl font-black">
-            KickDistrict
+            Mpatitas Comodas
           </h1>
 
           <p className="text-xs text-gray-500">
@@ -187,7 +187,7 @@ export default function AdminLayout({
 
           <div>
             <h1 className="text-3xl font-black text-gray-900">
-              KickDistrict
+              Mpatitas Comodas
             </h1>
 
             <p className="mt-1 text-sm text-gray-500">

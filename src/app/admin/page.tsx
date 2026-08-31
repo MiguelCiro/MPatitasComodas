@@ -128,7 +128,7 @@ export default function AdminDashboard() {
 
         <p className="mt-2 text-gray-500">
           Bienvenido al panel de administración de
-          KickDistrict.
+          Mpatitas Comodas.
         </p>
       </div>
 
