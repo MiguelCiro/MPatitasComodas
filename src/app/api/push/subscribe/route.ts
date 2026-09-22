@@ -4,6 +4,10 @@ import {
 } from "next/server";
 
 import {
+  createSupabaseServerClient,
+} from "@/lib/supabase-server";
+
+import {
   supabaseAdmin,
 } from "@/lib/supabase-admin";
 
@@ -20,14 +24,66 @@ export const revalidate = 0;
 
 // ============================================
 // POST
-// REGISTRAR SUSCRIPCIÓN
+// REGISTRAR SUSCRIPCIÓN PUSH
 // ============================================
 
 export async function POST(
   request: NextRequest
 ) {
-
   try {
+
+    // ========================================
+    // OBTENER USUARIO AUTENTICADO
+    // ========================================
+
+    const supabase =
+      await createSupabaseServerClient();
+
+    const {
+      data: {
+        user,
+      },
+      error: userError,
+    } =
+      await supabase.auth.getUser();
+
+
+    if (
+      userError ||
+      !user
+    ) {
+
+      console.error(
+        "❌ Usuario no autenticado al registrar Push:",
+        userError
+      );
+
+      return NextResponse.json(
+        {
+          error:
+            "Debes iniciar sesión para activar las notificaciones.",
+        },
+        {
+          status: 401,
+        }
+      );
+    }
+
+
+    console.log(
+      "👤 Usuario autenticado:",
+      user.id
+    );
+
+    console.log(
+      "📧 Email:",
+      user.email
+    );
+
+
+    // ========================================
+    // LEER BODY
+    // ========================================
 
     const body =
       await request.json();
@@ -41,7 +97,7 @@ export async function POST(
 
 
     // ========================================
-    // VALIDAR
+    // VALIDAR SUSCRIPCIÓN
     // ========================================
 
     if (
@@ -78,7 +134,7 @@ export async function POST(
 
 
     // ========================================
-    // GUARDAR / ACTUALIZAR
+    // GUARDAR SUSCRIPCIÓN
     // ========================================
 
     const {
@@ -91,6 +147,9 @@ export async function POST(
         )
         .upsert(
           {
+            user_id:
+              user.id,
+
             endpoint,
 
             p256dh:
@@ -108,10 +167,14 @@ export async function POST(
           }
         )
         .select(
-          "id, endpoint"
+          "id, user_id, endpoint"
         )
         .single();
 
+
+    // ========================================
+    // ERROR SUPABASE
+    // ========================================
 
     if (error) {
 
@@ -135,9 +198,22 @@ export async function POST(
     }
 
 
+    // ========================================
+    // ÉXITO
+    // ========================================
+
     console.log(
-      "✅ Suscripción Push registrada:",
+      "✅ Suscripción Push registrada:"
+    );
+
+    console.log(
+      "🆔 Subscription ID:",
       data?.id
+    );
+
+    console.log(
+      "👤 User ID:",
+      data?.user_id
     );
 
 
@@ -147,6 +223,9 @@ export async function POST(
 
         subscriptionId:
           data?.id,
+
+        userId:
+          data?.user_id,
       },
       {
         status: 200,
